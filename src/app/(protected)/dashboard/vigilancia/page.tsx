@@ -4,13 +4,11 @@ import { useMemo, useState } from "react"
 import { EpidemiologySidebar } from "@/components/epidemiology/epidemiology-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SiteHeader } from "@/components/site-header"
-import { JerarquiaSelector } from "@/components/epidemiology/jerarquia-selector"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Plus, Search, Filter, Download, CheckCircle, XCircle, MapPin } from "lucide-react"
 import Link from "next/link"
-import { DispersionChart } from "@/components/epidemiology/dispersion-chart"
 import { MapaInteractivo } from "@/components/epidemiology/mapa-loreto-interactive"
 import { BarrasChart, HistogramaChart, ParetoChart, MosaicoChart } from "@/components/charts"
 import { getDistritoCoord } from "@/lib/loreto-coords"
@@ -186,15 +184,7 @@ const notificacionesMock: NotificacionItem[] = [
 
 export default function Page() {
   const [geresaSeleccionada, setGeresaSeleccionada] = useState("LORETO")
-  const [distritoSeleccionado, setDistritoSeleccionado] = useState<{distrito: string; casos: number} | null>(null)
-
-  const datosGrafico = useMemo(() => {
-    return notificacionesMock.map(n => ({
-      semana: n.semana,
-      casos: 1,
-      distrito: n.distrito
-    }))
-  }, [])
+  const [, setDistritoSeleccionado] = useState<{distrito: string; casos: number} | null>(null)
 
   const datosMapa = useMemo(() => {
     const counts = new Map<string, number>()
@@ -245,7 +235,7 @@ export default function Page() {
         <div className="p-4 md:p-6 flex flex-col gap-6">
           
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="w-full sm:w-[250px]">
+            <div className="w-full sm:w-62.5">
               <Select value={geresaSeleccionada} onValueChange={setGeresaSeleccionada}>
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar GERESA" />
@@ -293,15 +283,14 @@ export default function Page() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
+            {/* <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Diagrama de Dispersión - Casos por Semana</CardTitle>
               </CardHeader>
               <CardContent>
                 <DispersionChart data={datosGrafico} />
               </CardContent>
-            </Card>
+            </Card> */}
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium flex items-center gap-2">
@@ -317,7 +306,6 @@ export default function Page() {
                 />
               </CardContent>
             </Card>
-          </div>
 
           {/* Gráficos de Análisis */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
