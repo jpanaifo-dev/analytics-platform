@@ -7,6 +7,8 @@ import {
   Map,
   Brain,
   Activity,
+  FileText,
+  BarChart3,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -96,6 +98,36 @@ const data = {
         {
           title: "Modelos IA",
           url: "/dashboard/prediccion/modelos",
+        },
+      ],
+    },
+    {
+      title: "Mapas",
+      url: "/dashboard/mapas",
+      icon: Map,
+      items: [
+        {
+          title: "Distribución Geográfica",
+          url: "/dashboard/mapas",
+        },
+        {
+          title: "Por Provincia",
+          url: "/dashboard/mapas?vista=provincia",
+        },
+      ],
+    },
+    {
+      title: "Reportes",
+      url: "/dashboard/reportes",
+      icon: FileText,
+      items: [
+        {
+          title: "Generar Reportes",
+          url: "/dashboard/reportes",
+        },
+        {
+          title: "Historial",
+          url: "/dashboard/reportes?tab=historial",
         },
       ],
     },

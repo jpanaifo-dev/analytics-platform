@@ -1,7 +1,5 @@
 "use client"
-
-import { useMemo } from "react"
-import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet"
+import { useMemo, useState, useEffect } from "react"
 import "leaflet/dist/leaflet.css"
 
 interface MapaInteractivoProps {
@@ -22,9 +20,12 @@ const getRadio = (casos: number): number => {
   return Math.min(8 + casos * 2, 30)
 }
 
-export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: MapaInteractivoProps) {
-  const totalCasos = useMemo(() => datos.reduce((a, b) => a + b.casos, 0), [datos])
-  const distritosConCasos = useMemo(() => datos.filter(d => d.casos > 0).length, [datos])
+function MapaContent({ datos, onDistritoClick }: { datos: MapaInteractivoProps['datos']; onDistritoClick?: MapaInteractivoProps['onDistritoClick'] }) {
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
 
   const center: [number, number] = useMemo(() => {
     if (datos.length === 0) return [-4.5, -74.5]
@@ -32,6 +33,75 @@ export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: Ma
     const lng = datos.reduce((sum, d) => sum + d.lng, 0) / datos.length
     return [lat, lng]
   }, [datos])
+
+  if (!isClient) {
+    return (
+      <div className="w-full h-full bg-slate-100 rounded-lg flex items-center justify-center">
+        <span className="text-slate-500">Cargando mapa...</span>
+      </div>
+    )
+  }
+
+  const MapContainer = require("react-leaflet").MapContainer
+  const TileLayer = require("react-leaflet").TileLayer
+  const CircleMarker = require("react-leaflet").CircleMarker
+  const Popup = require("react-leaflet").Popup
+
+  return (
+    <MapContainer
+      center={center}
+      zoom={7}
+      style={{ height: "100%", width: "100%" }}
+      scrollWheelZoom={true}
+    >
+      <TileLayer
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      />
+      {datos.map((d) => (
+        <CircleMarker
+          key={d.distrito}
+          center={[d.lat, d.lng]}
+          radius={getRadio(d.casos)}
+          pathOptions={{
+            fillColor: getColor(d.casos),
+            fillOpacity: 0.8,
+            color: "#fff",
+            weight: 2,
+          }}
+          eventHandlers={{
+            click: () => {
+              if (onDistritoClick) {
+                onDistritoClick(d.distrito, d.casos)
+              }
+            },
+          }}
+        >
+          <Popup>
+            <div className="min-w-[150px]">
+              <strong className="text-sm text-slate-800">{d.distrito}</strong>
+              <hr className="my-2 border-slate-200" />
+              <div className="flex justify-between">
+                <span className="text-slate-500 text-xs">Casos:</span>
+                <strong className="text-base" style={{ color: getColor(d.casos) }}>{d.casos}</strong>
+              </div>
+              {d.enfermedad && (
+                <div className="flex justify-between mt-1">
+                  <span className="text-slate-500 text-xs">Enfermedad:</span>
+                  <span className="text-slate-700 font-medium text-xs">{d.enfermedad}</span>
+                </div>
+              )}
+            </div>
+          </Popup>
+        </CircleMarker>
+      ))}
+    </MapContainer>
+  )
+}
+
+export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: MapaInteractivoProps) {
+  const totalCasos = useMemo(() => datos.reduce((a, b) => a + b.casos, 0), [datos])
+  const distritosConCasos = useMemo(() => datos.filter(d => d.casos > 0).length, [datos])
 
   return (
     <div className="w-full">
@@ -55,55 +125,8 @@ export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: Ma
         </div>
       </div>
 
-      <div className="relative w-full h-100 rounded-lg overflow-hidden border">
-        <MapContainer
-          center={center}
-          zoom={7}
-          style={{ height: "100%", width: "100%" }}
-          scrollWheelZoom={true}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          {datos.map((d) => (
-            <CircleMarker
-              key={d.distrito}
-              center={[d.lat, d.lng]}
-              radius={getRadio(d.casos)}
-              pathOptions={{
-                fillColor: getColor(d.casos),
-                fillOpacity: 0.8,
-                color: "#fff",
-                weight: 2,
-              }}
-              eventHandlers={{
-                click: () => {
-                  if (onDistritoClick) {
-                    onDistritoClick(d.distrito, d.casos)
-                  }
-                },
-              }}
-            >
-              <Popup>
-                <div className="min-w-37.5">
-                  <strong className="text-sm text-slate-800">{d.distrito}</strong>
-                  <hr className="my-2 border-slate-200" />
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 text-xs">Casos:</span>
-                    <strong className="text-base" style={{ color: getColor(d.casos) }}>{d.casos}</strong>
-                  </div>
-                  {d.enfermedad && (
-                    <div className="flex justify-between mt-1">
-                      <span className="text-slate-500 text-xs">Enfermedad:</span>
-                      <span className="text-slate-700 font-medium text-xs">{d.enfermedad}</span>
-                    </div>
-                  )}
-                </div>
-              </Popup>
-            </CircleMarker>
-          ))}
-        </MapContainer>
+      <div className="relative w-full h-[400px] rounded-lg overflow-hidden border">
+        <MapaContent datos={datos} onDistritoClick={onDistritoClick} />
       </div>
 
       <div className="mt-3 p-3 bg-card rounded-lg border">

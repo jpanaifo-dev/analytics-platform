@@ -23,6 +23,8 @@ import { CardTableContainer } from "@/components/epidemiology/card-table-contain
 import { FiltrosPanel, FiltrosSalaSituacional } from "@/components/epidemiology/filtros-panel"
 import { DetalleDistrito } from "@/components/epidemiology/detalle-distrito"
 import { ComparacionEnfermedades } from "@/components/epidemiology/comparacion-enfermedades"
+import { AlertasTempTempranas } from "@/components/epidemiology/alertas-tempranas"
+import { BoletinEpidemiologico } from "@/components/epidemiology/boletin-epidemiologico"
 import { BarrasChart, HistogramaChart, ParetoChart, MosaicoChart } from "@/components/charts"
 import { 
   CanalEndemico,
@@ -224,6 +226,12 @@ export default function SalaSituacionalPage() {
               onCerrar={() => setMostrarComparacion(false)}
             />
           )}
+
+          {/* Alertas Tempranas de Brotes */}
+          <AlertasTempTempranas enfermedad={enfermedadActiva} />
+
+          {/* Boletín Epidemiológico */}
+          <BoletinEpidemiologico />
 
           {/* Tablas de Resumen y Distritos */}
           <div className="flex flex-col gap-4 lg:gap-6 lg:grid lg:grid-cols-2">

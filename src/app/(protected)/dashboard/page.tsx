@@ -95,7 +95,7 @@ export default function Page() {
   const semanaActual = getSemanaEpidemiologica(new Date())
 
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider>
       <EpidemiologySidebar />
       <SidebarInset>
         <SiteHeader sectionTitle="Sala Situacional" />
