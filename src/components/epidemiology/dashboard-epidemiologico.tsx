@@ -1,10 +1,6 @@
 "use client"
-
-import { useState, useMemo } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { 
   LineChart, 
   Line, 
@@ -30,7 +26,6 @@ import {
   AlertTriangle,
   CheckCircle,
   Gauge,
-  Target,
   Users,
   MapPin,
   Shield,
@@ -137,7 +132,7 @@ export function CanalEndemico({ enfermedad }: CanalEndemicoProps) {
           </div>
         </div>
 
-        <div className="h-[160px]">
+        <div className="h-40">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={chartData}>
               <defs>
@@ -198,7 +193,7 @@ export function TendenciaEnfermedad({ enfermedad }: { enfermedad: string }) {
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[150px]">
+        <div className="h-37.5">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -243,11 +238,11 @@ export function DistribucionEdadGenero({ enfermedad }: { enfermedad: string }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Users className="h-4 w-4" />
-          Edad y Género
+          Edad y Género - {enfermedad}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[180px]">
+        <div className="h-45">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={datos} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
@@ -280,11 +275,11 @@ export function DistribucionCasos({ enfermedad }: { enfermedad: string }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <MapPin className="h-4 w-4" />
-          Por Distrito
+          Por Distrito - {enfermedad}
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[180px]">
+        <div className="h-45">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -295,7 +290,7 @@ export function DistribucionCasos({ enfermedad }: { enfermedad: string }) {
                 outerRadius={60}
                 paddingAngle={2}
                 dataKey="value"
-                label={({ name, percent }) => `${((percent || 0) * 100).toFixed(0)}%`}
+                label={({ percent }) => `${((percent || 0) * 100).toFixed(0)}%`}
                 labelLine={false}
               >
                 {datos.map((_, index) => (
@@ -326,7 +321,7 @@ export function IndicadoresCockpit({ enfermedad }: { enfermedad: string }) {
       <CardHeader className="pb-2">
         <CardTitle className="text-sm flex items-center gap-2">
           <Zap className="h-4 w-4 text-amber-500" />
-          Panel de Control
+          Panel de Control - {enfermedad}
         </CardTitle>
       </CardHeader>
       <CardContent>

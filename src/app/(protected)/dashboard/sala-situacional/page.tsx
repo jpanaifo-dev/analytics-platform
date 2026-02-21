@@ -28,7 +28,6 @@ import {
   TendenciaEnfermedad,
   DistribucionEdadGenero,
   DistribucionCasos,
-  IndicadoresCockpit
 } from "@/components/epidemiology/dashboard-epidemiologico"
 import { 
   DISTRITOS_FRONTERIZOS,
@@ -119,7 +118,7 @@ export default function SalaSituacionalPage() {
                 
                 <div className="flex flex-wrap items-center gap-3">
                   <Select value={semanaSeleccionada} onValueChange={setSemanaSeleccionada}>
-                    <SelectTrigger className="w-[140px]">
+                    <SelectTrigger className="w-35">
                       <SelectValue placeholder="Semana" />
                     </SelectTrigger>
                     <SelectContent>
@@ -129,7 +128,7 @@ export default function SalaSituacionalPage() {
                     </SelectContent>
                   </Select>
                   <Select value={enfermedadActiva} onValueChange={setEnfermedadActiva}>
-                    <SelectTrigger className="w-[200px]">
+                    <SelectTrigger className="w-50">
                       <SelectValue placeholder="Enfermedad" />
                     </SelectTrigger>
                     <SelectContent>
