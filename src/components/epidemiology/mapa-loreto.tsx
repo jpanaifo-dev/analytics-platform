@@ -94,25 +94,25 @@ export function MapaLoreto({ datos }: MapaLoretoProps) {
         <text x="320" y="455" className="text-[9px] fill-slate-500">Frontera con Brasil</text>
       </svg>
       
-      <div className="absolute bottom-3 right-3 bg-white/95 rounded-lg p-3 shadow-md border">
-        <p className="text-xs font-medium mb-2">Leyenda</p>
+      <div className="absolute bottom-3 right-3 bg-card/95 dark:bg-card/80 rounded-lg p-3 shadow-md border">
+        <p className="text-xs font-medium mb-2 text-card-foreground">Leyenda</p>
         <div className="flex items-center gap-2 mb-1">
           <div className="w-4 h-4 rounded bg-green-300 border border-slate-400"></div>
-          <span className="text-xs">1 caso</span>
+          <span className="text-xs text-card-foreground">1 caso</span>
         </div>
         <div className="flex items-center gap-2 mb-1">
           <div className="w-4 h-4 rounded bg-yellow-300 border border-slate-400"></div>
-          <span className="text-xs">2 casos</span>
+          <span className="text-xs text-card-foreground">2 casos</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded bg-red-300 border border-slate-400"></div>
-          <span className="text-xs">3+ casos</span>
+          <span className="text-xs text-card-foreground">3+ casos</span>
         </div>
       </div>
 
-      <div className="absolute top-3 right-3 bg-white/95 rounded-lg p-3 shadow-md border">
-        <p className="text-xs font-medium mb-1">Total Casos</p>
-        <p className="text-2xl font-bold text-slate-700">{datos.reduce((a, b) => a + b.casos, 0)}</p>
+      <div className="absolute top-3 right-3 bg-card/95 dark:bg-card/80 rounded-lg p-3 shadow-md border">
+        <p className="text-xs font-medium mb-1 text-card-foreground">Total Casos</p>
+        <p className="text-2xl font-bold text-card-foreground">{datos.reduce((a, b) => a + b.casos, 0)}</p>
         <p className="text-xs text-muted-foreground">Notificaciones</p>
       </div>
     </div>
