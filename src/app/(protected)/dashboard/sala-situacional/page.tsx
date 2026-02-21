@@ -1,6 +1,7 @@
 "use client"
 import { useState, useMemo } from "react"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { EpidemiologySidebar } from "@/components/epidemiology/epidemiology-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -102,7 +103,8 @@ export default function SalaSituacionalPage() {
     filtros.nivelAlerta.length
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider>
+      <EpidemiologySidebar />
       <SidebarInset>
         <SiteHeader sectionTitle="Sala Situacional - Loreto" />
         <div className="p-4 md:p-6 flex flex-col gap-5 bg-muted/30 min-h-screen">

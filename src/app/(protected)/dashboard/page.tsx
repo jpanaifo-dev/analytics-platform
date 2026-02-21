@@ -4,7 +4,7 @@ import { EpidemiologySidebar } from "@/components/epidemiology/epidemiology-side
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { KpiGrid } from "@/components/epidemiology/kpi-card"
-import { CanalEndemicoChart, generateMockCanalEndemicoData } from "@/components/epidemiology/canal-endemico"
+import { CanalEndemico } from "@/components/epidemiology/canal-endemico"
 import { AlertaPanel, AlertaCard } from "@/components/epidemiology/alerta-panel"
 import { JerarquiaSelector } from "@/components/epidemiology/jerarquia-selector"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -93,7 +93,6 @@ const alertasMock: Alerta[] = [
 
 export default function Page() {
   const semanaActual = getSemanaEpidemiologica(new Date())
-  const canalData = generateMockCanalEndemicoData({ anio: semanaActual.anio })
 
   return (
     <SidebarProvider defaultOpen={false}>
@@ -115,7 +114,7 @@ export default function Page() {
               </span>
             </div>
             
-            <div className="w-full sm:w-[300px]">
+            <div className="w-full sm:w-35">
               <JerarquiaSelector
                 onChange={(value) => console.log("Selected:", value)}
               />
@@ -130,11 +129,7 @@ export default function Page() {
                 <CardTitle className="text-base font-semibold">Canal Endémico - IRAG</CardTitle>
               </CardHeader>
               <CardContent>
-                <CanalEndemicoChart
-                  data={canalData}
-                  semanaActual={semanaActual.se}
-                  titulo=""
-                />
+                <CanalEndemico />
               </CardContent>
             </Card>
 
