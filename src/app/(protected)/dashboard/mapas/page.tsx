@@ -8,15 +8,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { MapaInteractivo } from "@/components/epidemiology/mapa-loreto-interactive"
-import { BarrasChart, HistogramaChart, ParetoChart } from "@/components/charts"
+import { BarrasChart } from "@/components/charts"
 import { 
   MapPin, 
   Layers,
   BarChart3,
   List,
-  Filter,
   ZoomIn,
   ZoomOut,
   Maximize2
@@ -72,17 +70,9 @@ function getColorAlerta(nivel: DistritoData["nivelAlerta"]) {
   }
 }
 
-function getColorAlertaBorder(nivel: DistritoData["nivelAlerta"]) {
-  switch (nivel) {
-    case "epidemia": return "border-red-500"
-    case "alarma": return "border-orange-500"
-    case "seguridad": return "border-yellow-500"
-    case "exito": return "border-green-500"
-  }
-}
+
 
 export default function MapasEpidemiologicosPage() {
-  const [nivelVista, setNivelVista] = useState<"provincia" | "distrito">("distrito")
   const [enfermedadSeleccionada, setEnfermedadSeleccionada] = useState("Dengue")
   const [provinciaSeleccionada, setProvinciaSeleccionada] = useState("todos")
 
@@ -121,7 +111,7 @@ export default function MapasEpidemiologicosPage() {
                 <div className="flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-muted-foreground" />
                   <Select value={enfermedadSeleccionada} onValueChange={setEnfermedadSeleccionada}>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger className="w-45">
                       <SelectValue placeholder="Enfermedad" />
                     </SelectTrigger>
                     <SelectContent>
@@ -137,7 +127,7 @@ export default function MapasEpidemiologicosPage() {
                 <div className="flex items-center gap-2">
                   <Layers className="h-4 w-4 text-muted-foreground" />
                   <Select value={provinciaSeleccionada} onValueChange={setProvinciaSeleccionada}>
-                    <SelectTrigger className="w-[200px]">
+                    <SelectTrigger className="w-50">
                       <SelectValue placeholder="Provincia" />
                     </SelectTrigger>
                     <SelectContent>
