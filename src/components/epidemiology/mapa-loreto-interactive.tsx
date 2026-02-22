@@ -1,6 +1,8 @@
 "use client"
-import { useMemo, useState, useEffect } from "react"
+import { useMemo } from "react"
+import dynamic from "next/dynamic"
 import "leaflet/dist/leaflet.css"
+import { MapContainer, TileLayer, CircleMarker, Popup } from "react-leaflet"
 
 interface MapaInteractivoProps {
   datos: { distrito: string; lat: number; lng: number; casos: number; enfermedad?: string }[]
@@ -21,31 +23,12 @@ const getRadio = (casos: number): number => {
 }
 
 function MapaContent({ datos, onDistritoClick }: { datos: MapaInteractivoProps['datos']; onDistritoClick?: MapaInteractivoProps['onDistritoClick'] }) {
-  const [isClient, setIsClient] = useState(false)
-
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-
   const center: [number, number] = useMemo(() => {
     if (datos.length === 0) return [-4.5, -74.5]
     const lat = datos.reduce((sum, d) => sum + d.lat, 0) / datos.length
     const lng = datos.reduce((sum, d) => sum + d.lng, 0) / datos.length
     return [lat, lng]
   }, [datos])
-
-  if (!isClient) {
-    return (
-      <div className="w-full h-full bg-slate-100 rounded-lg flex items-center justify-center">
-        <span className="text-slate-500">Cargando mapa...</span>
-      </div>
-    )
-  }
-
-  const MapContainer = require("react-leaflet").MapContainer
-  const TileLayer = require("react-leaflet").TileLayer
-  const CircleMarker = require("react-leaflet").CircleMarker
-  const Popup = require("react-leaflet").Popup
 
   return (
     <MapContainer
@@ -78,7 +61,7 @@ function MapaContent({ datos, onDistritoClick }: { datos: MapaInteractivoProps['
           }}
         >
           <Popup>
-            <div className="min-w-[150px]">
+            <div className="min-w-37.5">
               <strong className="text-sm text-slate-800">{d.distrito}</strong>
               <hr className="my-2 border-slate-200" />
               <div className="flex justify-between">
@@ -98,6 +81,15 @@ function MapaContent({ datos, onDistritoClick }: { datos: MapaInteractivoProps['
     </MapContainer>
   )
 }
+
+const MapaContentDynamic = dynamic(() => Promise.resolve(MapaContent), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full bg-slate-100 rounded-lg flex items-center justify-center">
+      <span className="text-slate-500">Cargando mapa...</span>
+    </div>
+  ),
+})
 
 export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: MapaInteractivoProps) {
   const totalCasos = useMemo(() => datos.reduce((a, b) => a + b.casos, 0), [datos])
@@ -125,8 +117,8 @@ export function MapaInteractivo({ datos, enfermedadActiva, onDistritoClick }: Ma
         </div>
       </div>
 
-      <div className="relative w-full h-[400px] rounded-lg overflow-hidden border">
-        <MapaContent datos={datos} onDistritoClick={onDistritoClick} />
+      <div className="relative w-full h-100 rounded-lg overflow-hidden border">
+        <MapaContentDynamic datos={datos} onDistritoClick={onDistritoClick} />
       </div>
 
       <div className="mt-3 p-3 bg-card rounded-lg border">
