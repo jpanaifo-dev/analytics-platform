@@ -23,7 +23,7 @@ export default function LoginPage() {
       <div className="bg-muted relative hidden lg:block">
         <div className="absolute inset-0 bg-black/60 z-10" />
         <img
-          src="/images/bg-auth-webp"
+          src="/images/bg-auth.webp"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover"
         />
