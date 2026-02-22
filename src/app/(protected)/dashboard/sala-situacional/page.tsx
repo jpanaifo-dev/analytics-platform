@@ -1,6 +1,7 @@
 "use client"
 import { useState, useMemo } from "react"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { EpidemiologySidebar } from "@/components/epidemiology/epidemiology-sidebar"
 import { SiteHeader } from "@/components/site-header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -22,6 +23,8 @@ import { CardTableContainer } from "@/components/epidemiology/card-table-contain
 import { FiltrosPanel, FiltrosSalaSituacional } from "@/components/epidemiology/filtros-panel"
 import { DetalleDistrito } from "@/components/epidemiology/detalle-distrito"
 import { ComparacionEnfermedades } from "@/components/epidemiology/comparacion-enfermedades"
+import { AlertasTempTempranas } from "@/components/epidemiology/alertas-tempranas"
+import { BoletinEpidemiologico } from "@/components/epidemiology/boletin-epidemiologico"
 import { BarrasChart, HistogramaChart, ParetoChart, MosaicoChart } from "@/components/charts"
 import { 
   CanalEndemico,
@@ -102,7 +105,8 @@ export default function SalaSituacionalPage() {
     filtros.nivelAlerta.length
 
   return (
-    <SidebarProvider defaultOpen={true}>
+    <SidebarProvider>
+      <EpidemiologySidebar />
       <SidebarInset>
         <SiteHeader sectionTitle="Sala Situacional - Loreto" />
         <div className="p-4 md:p-6 flex flex-col gap-5 bg-muted/30 min-h-screen">
@@ -222,6 +226,12 @@ export default function SalaSituacionalPage() {
               onCerrar={() => setMostrarComparacion(false)}
             />
           )}
+
+          {/* Alertas Tempranas de Brotes */}
+          <AlertasTempTempranas enfermedad={enfermedadActiva} />
+
+          {/* Boletín Epidemiológico */}
+          <BoletinEpidemiologico />
 
           {/* Tablas de Resumen y Distritos */}
           <div className="flex flex-col gap-4 lg:gap-6 lg:grid lg:grid-cols-2">

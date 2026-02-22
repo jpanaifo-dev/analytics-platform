@@ -18,7 +18,7 @@ export function DispersionChart({ data }: DispersionChartProps) {
   const maxCasos = Math.max(...data.map(d => d.casos), 5)
 
   return (
-    <div className="h-[300px] w-full">
+    <div className="h-75 w-full">
       <ResponsiveContainer width="100%" height="100%">
         <ScatterChart margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
           <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />

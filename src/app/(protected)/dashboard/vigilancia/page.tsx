@@ -1,96 +1,17 @@
 "use client"
 
-<<<<<<< HEAD
-=======
-import { useMemo } from "react"
->>>>>>> 0d24ce3 (fixed  firts commmit)
+import { useMemo, useState } from "react"
 import { EpidemiologySidebar } from "@/components/epidemiology/epidemiology-sidebar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { SiteHeader } from "@/components/site-header"
-import { JerarquiaSelector } from "@/components/epidemiology/jerarquia-selector"
-<<<<<<< HEAD
-import { BadgeClasificacion, BadgeCondicion } from "@/components/epidemiology/status-badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Caso } from "@/types/epidemiology"
-import { Button } from "@/components/ui/button"
-import { Plus, Search, Filter, Download, FileText } from "lucide-react"
-
-const casosMock: Caso[] = [
-  {
-    id: "1",
-    numeroNotificacion: "NOTI-2026-00001",
-    fechaNotificacion: new Date("2026-02-18"),
-    semanaEpidemiologica: { anio: 2026, se: 7, fechaInicio: new Date("2026-02-10"), fechaFin: new Date("2026-02-16"), fechaSemana: new Date() },
-    paciente: {
-      tipoDocumento: "DNI",
-      numeroDocumento: "12345678",
-      nombres: "Maria",
-      apellidoPaterno: "Garcia",
-      apellidoMaterno: "Lopez",
-      fechaNacimiento: new Date("1990-05-15"),
-      edad: 35,
-      unidadEdad: "AÑOS",
-      sexo: "F",
-      telefono: "999888777"
-    },
-    ubicacion: {
-      region: { id: "15", codigo: "LIM", nombre: "Lima", pais: "Perú" },
-      red: { id: "1501", codigo: "DIRSA-LIMA", nombre: "DIRSA Lima Centro", regionId: "15" },
-      microrred: { id: "150101", codigo: "MR-01", nombre: "Lima Centro", redId: "1501" },
-      establecimiento: { id: "1", codigo: "I-4-001", nombre: "Hospital Central", microrredId: "150101", nivel: "I-4", tipo: "MINSA" }
-    },
-    diagnostico: {
-      diagnosticoPrincipal: { codigo: "A90", categoria: "A", descripcion: "Dengue [fiebre hemorrhágica del dengue]", grupo: "Enfermedades transmitidas por vectores" }
-    },
-    clasificacion: "CONFIRMADO",
-    condicion: "VIVO",
-    fechaInicioSintomas: new Date("2026-02-14"),
-    fechaTomaMuestra: new Date("2026-02-15"),
-    tipoNotificacion: "INMEDIATA",
-    notificadoPor: "Dr. Juan Perez",
-    createdAt: new Date(),
-    updatedAt: new Date()
-  },
-  {
-    id: "2",
-    numeroNotificacion: "NOTI-2026-00002",
-    fechaNotificacion: new Date("2026-02-19"),
-    semanaEpidemiologica: { anio: 2026, se: 7, fechaInicio: new Date("2026-02-10"), fechaFin: new Date("2026-02-16"), fechaSemana: new Date() },
-    paciente: {
-      tipoDocumento: "DNI",
-      numeroDocumento: "87654321",
-      nombres: "Carlos",
-      apellidoPaterno: "Rodriguez",
-      apellidoMaterno: "Santos",
-      fechaNacimiento: new Date("1985-08-22"),
-      edad: 40,
-      unidadEdad: "AÑOS",
-      sexo: "M",
-      telefono: "977766655"
-    },
-    ubicacion: {
-      region: { id: "15", codigo: "LIM", nombre: "Lima", pais: "Perú" },
-      red: { id: "1502", codigo: "DIRSA-LIMA-ESTE", nombre: "DIRSA Lima Este", regionId: "15" },
-      microrred: { id: "150201", codigo: "MR-04", nombre: "Ate", redId: "1502" }
-    },
-    diagnostico: {
-      diagnosticoPrincipal: { codigo: "J11", categoria: "J", descripcion: "Influenza con neumonía", grupo: "Enfermedades respiratorias" }
-    },
-    clasificacion: "PROBABLE",
-    condicion: "VIVO",
-    fechaInicioSintomas: new Date("2026-02-16"),
-    fechaHospitalizacion: new Date("2026-02-18"),
-    tipoNotificacion: "INMEDIATA",
-    notificadoPor: "Dra. Ana Lopez",
-    createdAt: new Date(),
-    updatedAt: new Date()
-=======
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Plus, Search, Filter, Download, CheckCircle, XCircle } from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Plus, Search, Filter, Download, CheckCircle, XCircle, MapPin } from "lucide-react"
 import Link from "next/link"
-import { DispersionChart } from "@/components/epidemiology/dispersion-chart"
-import { MapaLoreto } from "@/components/epidemiology/mapa-loreto"
+import { MapaInteractivo } from "@/components/epidemiology/mapa-loreto-interactive"
+import { BarrasChart, HistogramaChart, ParetoChart, MosaicoChart } from "@/components/charts"
+import { getDistritoCoord } from "@/lib/loreto-coords"
 
 interface NotificacionItem {
   id: string
@@ -258,39 +179,93 @@ const notificacionesMock: NotificacionItem[] = [
     materno: "MORALES",
     nombres: "FERNANDO JOSE",
     verificado: true
->>>>>>> 0d24ce3 (fixed  firts commmit)
   }
 ]
 
 export default function Page() {
-<<<<<<< HEAD
-=======
-  const datosGrafico = useMemo(() => {
-    return notificacionesMock.map(n => ({
-      semana: n.semana,
-      casos: 1,
-      distrito: n.distrito
-    }))
-  }, [])
+  const [geresaSeleccionada, setGeresaSeleccionada] = useState("LORETO")
+  const [, setDistritoSeleccionado] = useState<{distrito: string; casos: number} | null>(null)
 
   const datosMapa = useMemo(() => {
     const counts = new Map<string, number>()
     notificacionesMock.forEach(n => {
       counts.set(n.distrito, (counts.get(n.distrito) || 0) + 1)
     })
-    return Array.from(counts.entries()).map(([distrito, casos]) => ({ distrito, casos }))
+    return Array.from(counts.entries()).map(([distrito, casos]) => {
+      const coord = getDistritoCoord(distrito)
+      return {
+        distrito,
+        casos,
+        lat: coord?.lat || -4.5,
+        lng: coord?.lng || -74.5
+      }
+    })
   }, [])
->>>>>>> 0d24ce3 (fixed  firts commmit)
+
+  const datosEnfermedades = useMemo(() => {
+    const counts = new Map<string, number>()
+    notificacionesMock.forEach(n => {
+      const dx = n.diagnostico.split(' - ')[0]
+      counts.set(dx, (counts.get(dx) || 0) + 1)
+    })
+    return Array.from(counts.entries())
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value)
+  }, [])
+
+  const datosSemanas = useMemo(() => {
+    const counts = new Map<number, number>()
+    notificacionesMock.forEach(n => {
+      counts.set(n.semana, (counts.get(n.semana) || 0) + 1)
+    })
+    return Array.from(counts.entries())
+      .map(([semana, casos]) => ({ semana, casos }))
+      .sort((a, b) => a.semana - b.semana)
+  }, [])
+
+  const handleDistritoClick = (distrito: string, casos: number) => {
+    setDistritoSeleccionado({ distrito, casos })
+  }
+
   return (
-    <SidebarProvider defaultOpen={false}>
+    <SidebarProvider defaultOpen={true}>
       <EpidemiologySidebar />
       <SidebarInset>
         <SiteHeader sectionTitle="Vigilancia - Lista de Casos" />
         <div className="p-4 md:p-6 flex flex-col gap-6">
           
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-            <div className="w-full sm:w-[300px]">
-              <JerarquiaSelector onChange={(v) => console.log(v)} />
+            <div className="w-full sm:w-62.5">
+              <Select value={geresaSeleccionada} onValueChange={setGeresaSeleccionada}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Seleccionar GERESA" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="LORETO">LORETO</SelectItem>
+                  <SelectItem value="AMAZONAS">AMAZONAS</SelectItem>
+                  <SelectItem value="UCAYALI">UCAYALI</SelectItem>
+                  <SelectItem value="SAN MARTIN">SAN MARTÍN</SelectItem>
+                  <SelectItem value="MADRE DE DIOS">MADRE DE DIOS</SelectItem>
+                  <SelectItem value="LIMA">LIMA</SelectItem>
+                  <SelectItem value="CALLAO">CALLAO</SelectItem>
+                  <SelectItem value="PIURA">PIURA</SelectItem>
+                  <SelectItem value="LAMBAYEQUE">LAMBAYEQUE</SelectItem>
+                  <SelectItem value="LA LIBERTAD">LA LIBERTAD</SelectItem>
+                  <SelectItem value="ANCASH">ANCASH</SelectItem>
+                  <SelectItem value="HUANUCO">HUÁNUCO</SelectItem>
+                  <SelectItem value="PASCO">PASCO</SelectItem>
+                  <SelectItem value="JUNIN">JUNÍN</SelectItem>
+                  <SelectItem value="HUANCAVELICA">HUANCAVELICA</SelectItem>
+                  <SelectItem value="AYACUCHO">AYACUCHO</SelectItem>
+                  <SelectItem value="APURIMAC">APURÍMAC</SelectItem>
+                  <SelectItem value="CUSCO">CUSCO</SelectItem>
+                  <SelectItem value="PUNO">PUNO</SelectItem>
+                  <SelectItem value="MOQUEGUA">MOQUEGUA</SelectItem>
+                  <SelectItem value="TACNA">TACNA</SelectItem>
+                  <SelectItem value="AREQUIPA">AREQUIPA</SelectItem>
+                  <SelectItem value="AYACUCHO">AYACUCHO</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div className="flex gap-2 w-full sm:w-auto">
               <Button variant="outline" size="sm">
@@ -308,30 +283,85 @@ export default function Page() {
             </div>
           </div>
 
-<<<<<<< HEAD
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-base font-semibold">Casos Notificados</CardTitle>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Nueva Notificación
-=======
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card>
+            {/* <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Diagrama de Dispersión - Casos por Semana</CardTitle>
               </CardHeader>
               <CardContent>
                 <DispersionChart data={datosGrafico} />
               </CardContent>
-            </Card>
+            </Card> */}
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm font-medium">Mapa de Loreto - Distribución Geográfica</CardTitle>
+                <CardTitle className="text-sm font-medium flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  Mapa de Loreto - Distribución Geográfica
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <MapaLoreto datos={datosMapa} />
+                <MapaInteractivo 
+                  datos={datosMapa} 
+                  enfermedadActiva="Vigilancia"
+                  onDistritoClick={handleDistritoClick}
+                />
+              </CardContent>
+            </Card>
+
+          {/* Gráficos de Análisis */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Card>
+              <CardHeader className="pb-2 border-b">
+                <CardTitle className="text-sm font-semibold">Casos por Distrito</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <BarrasChart data={datosMapa.map(d => ({ name: d.distrito, value: d.casos }))} />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2 border-b">
+                <CardTitle className="text-sm font-semibold">Histograma por Semana</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <HistogramaChart 
+                  data={datosSemanas.map(d => ({ range: `SE ${d.semana}`, frecuencia: d.casos }))} 
+                />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2 border-b">
+                <CardTitle className="text-sm font-semibold">Diagrama de Pareto</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ParetoChart 
+                  data={datosEnfermedades.slice(0, 6).map((d, _, arr) => {
+                    const total = arr.reduce((sum, x) => sum + x.value, 0)
+                    const prevSum = arr.slice(0, arr.indexOf(d)).reduce((sum, x) => sum + x.value, 0)
+                    return { 
+                      name: d.name, 
+                      value: d.value,
+                      acumulado: Math.round(((prevSum + d.value) / total) * 100)
+                    }
+                  })} 
+                />
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="pb-2 border-b">
+                <CardTitle className="text-sm font-semibold">Análisis por TipoDx</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <MosaicoChart 
+                  data={[
+                    { category: "Confirmado", subcategory: "Dengue", value: 3, percentage: 30 },
+                    { category: "Confirmado", subcategory: "Sarampión", value: 1, percentage: 10 },
+                    { category: "Confirmado", subcategory: "Tuberculosis", value: 1, percentage: 10 },
+                    { category: "Probable", subcategory: "Influenza", value: 1, percentage: 10 },
+                    { category: "Probable", subcategory: "Peste", value: 1, percentage: 10 },
+                    { category: "Probable", subcategory: "Fiebre Tifoidea", value: 1, percentage: 10 },
+                    { category: "Sospechoso", subcategory: "Cólera", value: 1, percentage: 10 },
+                    { category: "Sospechoso", subcategory: "Rubéola", value: 1, percentage: 10 },
+                  ]} 
+                />
               </CardContent>
             </Card>
           </div>
@@ -345,7 +375,6 @@ export default function Page() {
                     <Plus className="h-4 w-4 mr-2" />
                     Nueva Notificación
                   </Link>
->>>>>>> 0d24ce3 (fixed  firts commmit)
                 </Button>
               </div>
             </CardHeader>
@@ -353,48 +382,6 @@ export default function Page() {
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-<<<<<<< HEAD
-                    <tr className="border-b">
-                      <th className="text-left py-3 px-2 font-medium">NOTI</th>
-                      <th className="text-left py-3 px-2 font-medium">Paciente</th>
-                      <th className="text-left py-3 px-2 font-medium">Diagnóstico</th>
-                      <th className="text-left py-3 px-2 font-medium">Clasificación</th>
-                      <th className="text-left py-3 px-2 font-medium">Condición</th>
-                      <th className="text-left py-3 px-2 font-medium">Establecimiento</th>
-                      <th className="text-left py-3 px-2 font-medium">Fecha</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {casosMock.map((caso) => (
-                      <tr key={caso.id} className="border-b hover:bg-accent/50">
-                        <td className="py-3 px-2">
-                          <a href={`/dashboard/vigilancia/${caso.id}`} className="text-primary hover:underline flex items-center gap-1">
-                            <FileText className="h-3 w-3" />
-                            {caso.numeroNotificacion}
-                          </a>
-                        </td>
-                        <td className="py-3 px-2">
-                          <div>
-                            <p className="font-medium">{caso.paciente.apellidoPaterno} {caso.paciente.apellidoMaterno}, {caso.paciente.nombres}</p>
-                            <p className="text-xs text-muted-foreground">{caso.paciente.tipoDocumento}: {caso.paciente.numeroDocumento}</p>
-                          </div>
-                        </td>
-                        <td className="py-3 px-2">
-                          <p className="font-mono text-xs">{caso.diagnostico.diagnosticoPrincipal.codigo}</p>
-                          <p className="text-xs text-muted-foreground truncate max-w-[150px]">{caso.diagnostico.diagnosticoPrincipal.descripcion}</p>
-                        </td>
-                        <td className="py-3 px-2">
-                          <BadgeClasificacion clasificacion={caso.clasificacion} />
-                        </td>
-                        <td className="py-3 px-2">
-                          <BadgeCondicion condicion={caso.condicion} />
-                        </td>
-                        <td className="py-3 px-2 text-xs">
-                          {caso.ubicacion.establecimiento?.nombre || caso.ubicacion.microrred?.nombre || "-"}
-                        </td>
-                        <td className="py-3 px-2 text-xs">
-                          {caso.fechaNotificacion.toLocaleDateString("es-PE")}
-=======
                     <tr className="border-b bg-muted/50">
                       <th className="text-left py-2 px-2 font-medium text-xs">AÑO</th>
                       <th className="text-left py-2 px-2 font-medium text-xs">SEMANA</th>
@@ -412,17 +399,17 @@ export default function Page() {
                   </thead>
                   <tbody>
                     {notificacionesMock.map((notif) => (
-                      <tr key={notif.id} className="border-b hover:bg-accent/50">
+                      <tr key={notif.id} className="border-b hover:bg-muted/50">
                         <td className="py-2 px-2 text-xs">{notif.anio}</td>
                         <td className="py-2 px-2 text-xs">{notif.semana}</td>
                         <td className="py-2 px-2 text-xs font-mono">{notif.numeroDocumento}</td>
                         <td className="py-2 px-2 text-xs">{notif.diagnostico}</td>
                         <td className="py-2 px-2 text-xs">
                           <span className={`px-1.5 py-0.5 rounded text-xs font-medium ${
-                            notif.tipoDx === 'CONFIRMADO' ? 'bg-green-100 text-green-800' :
-                            notif.tipoDx === 'PROBABLE' ? 'bg-yellow-100 text-yellow-800' :
-                            notif.tipoDx === 'SOSPECHOSO' ? 'bg-orange-100 text-orange-800' :
-                            'bg-blue-100 text-blue-800'
+                            notif.tipoDx === 'CONFIRMADO' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
+                            notif.tipoDx === 'PROBABLE' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
+                            notif.tipoDx === 'SOSPECHOSO' ? 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-400' :
+                            'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400'
                           }`}>
                             {notif.tipoDx}
                           </span>
@@ -439,7 +426,6 @@ export default function Page() {
                           ) : (
                             <XCircle className="h-4 w-4 text-red-500" />
                           )}
->>>>>>> 0d24ce3 (fixed  firts commmit)
                         </td>
                       </tr>
                     ))}

@@ -10,196 +10,211 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Line,
+  ComposedChart,
 } from "recharts"
-import { DatoCanalEndemico } from "@/types/epidemiology"
+import { Badge } from "@/components/ui/badge"
+import { useCanalEndemico, getZonaColor, getResumenZona } from "@/hooks/use-canalendemico"
 
-interface CanalEndemicoChartProps {
-  data: DatoCanalEndemico[]
-  semanaActual?: number
-  titulo?: string
+interface CanalEndemicoProps {
+  enfermedad?: string
   className?: string
+}
+
+function generateHistoricoData(): { semana: number; casos: number }[][] {
+  const years = [2020, 2021, 2022, 2023, 2024, 2025]
+  return years.map(() => {
+    const data: { semana: number; casos: number }[] = []
+    const casosBase = 30 + Math.random() * 50
+    
+    for (let semana = 1; semana <= 52; semana++) {
+      const estacionalidad = Math.sin((semana / 52) * 2 * Math.PI) * 20
+      const casos = Math.max(0, Math.round(casosBase + estacionalidad + (Math.random() - 0.5) * 30))
+      data.push({ semana, casos })
+    }
+    return data
+  })
+}
+
+function generateCasosActuales(): { semana: number; casos: number }[] {
+  const data: { semana: number; casos: number }[] = []
+  const casosBase = 40 + Math.random() * 30
+  
+  for (let semana = 1; semana <= 8; semana++) {
+    const estacionalidad = Math.sin((semana / 52) * 2 * Math.PI) * 15
+    const casos = Math.max(0, Math.round(casosBase + estacionalidad + (Math.random() - 0.5) * 25))
+    data.push({ semana, casos })
+  }
+  return data
 }
 
 interface CustomTooltipProps {
   active?: boolean
-  payload?: Array<{ value?: number }>
+  payload?: Array<{ value?: number; dataKey?: string; color?: string }>
   label?: string | number
 }
 
 function CustomTooltip({ active, payload, label }: CustomTooltipProps) {
   if (!active || !payload || !payload.length) return null
 
+  const zonaData = payload.find(p => p.dataKey === "casosActuales")
+  const casos = zonaData?.value || 0
+
   return (
     <div className="rounded-lg border bg-background p-3 shadow-md">
       <p className="font-semibold text-sm">Semana {label}</p>
       <div className="mt-2 space-y-1">
         <p className="text-xs text-muted-foreground">
-          Casos: <span className="font-medium text-foreground">{payload[0]?.value}</span>
+          Casos Actuales: <span className="font-medium text-foreground">{casos}</span>
         </p>
-        <p className="text-xs text-muted-foreground">
-          Mín: <span className="font-medium">{payload[1]?.value}</span>
+        <p className="text-xs text-green-600 dark:text-green-400">
+          Éxito (&lt;Q1): <span className="font-medium">{payload.find(p => p.dataKey === "exito")?.value}</span>
         </p>
-        <p className="text-xs text-muted-foreground">
-          P25: <span className="font-medium">{payload[2]?.value}</span>
+        <p className="text-xs text-yellow-600 dark:text-yellow-400">
+          Seguridad (Q1-Q2): <span className="font-medium">{payload.find(p => p.dataKey === "seguridad")?.value}</span>
         </p>
-        <p className="text-xs text-muted-foreground">
-          P50: <span className="font-medium">{payload[3]?.value}</span>
+        <p className="text-xs text-orange-600 dark:text-orange-400">
+          Alarma (Q2-Q3): <span className="font-medium">{payload.find(p => p.dataKey === "alarma")?.value}</span>
         </p>
-        <p className="text-xs text-muted-foreground">
-          P75: <span className="font-medium">{payload[4]?.value}</span>
-        </p>
-        <p className="text-xs text-muted-foreground">
-          Máx: <span className="font-medium">{payload[5]?.value}</span>
+        <p className="text-xs text-red-600 dark:text-red-400">
+          Epidemia (&gt;Q3): <span className="font-medium">{payload.find(p => p.dataKey === "epidemia")?.value}</span>
         </p>
       </div>
     </div>
   )
 }
 
-export function CanalEndemicoChart({
-  data,
-  titulo = "Canal Endémico",
-  className,
-}: CanalEndemicoChartProps) {
+export function CanalEndemico({ enfermedad = "Dengue", className }: CanalEndemicoProps) {
+  const historico = React.useMemo(() => generateHistoricoData(), [])
+  const casosActuales = React.useMemo(() => generateCasosActuales(), [])
+  
+  const canalData = useCanalEndemico(historico, casosActuales)
+  const resumen = getResumenZona(canalData)
+  const zonaInfo = getZonaColor(resumen.zonaActual)
+
+  const semanaActual = casosActuales.length > 0 ? Math.max(...casosActuales.map(c => c.semana)) : 1
+  const casosSemanaActual = casosActuales.find(c => c.semana === semanaActual)?.casos || 0
+
   return (
     <div className={className}>
-      <div className="mb-4">
-        <h3 className="text-base font-semibold">{titulo}</h3>
-        <p className="text-xs text-muted-foreground mt-1">
-          Comparación con canales históricos (2019-2025)
-        </p>
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h3 className="text-sm font-semibold">Canal Endémico - {enfermedad}</h3>
+          <p className="text-xs text-muted-foreground">
+            Comparación histórica (2020-2025)
+          </p>
+        </div>
+        <Badge className={`${zonaInfo.bg} text-white text-xs font-bold`}>
+          {zonaInfo.label}
+        </Badge>
       </div>
 
-      <div className="h-[350px] w-full">
+      <div className="h-[280px] w-full">
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart
-            data={data}
+          <ComposedChart
+            data={canalData}
             margin={{ top: 10, right: 10, left: 0, bottom: 0 }}
           >
             <defs>
+              <linearGradient id="colorExito" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#22c55e" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#22c55e" stopOpacity={0.05} />
+              </linearGradient>
+              <linearGradient id="colorSeguridad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#eab308" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#eab308" stopOpacity={0.05} />
+              </linearGradient>
+              <linearGradient id="colorAlarma" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#f97316" stopOpacity={0.3} />
+                <stop offset="95%" stopColor="#f97316" stopOpacity={0.05} />
+              </linearGradient>
               <linearGradient id="colorCasos" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.4} />
                 <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
               dataKey="semana"
-              tick={{ fontSize: 11 }}
+              tick={{ fontSize: 10 }}
               tickLine={false}
               axisLine={{ stroke: "#e5e7eb" }}
-              label={{ value: "SE", position: "insideBottomRight", offset: -5 }}
             />
             <YAxis
-              tick={{ fontSize: 11 }}
+              tick={{ fontSize: 10 }}
               tickLine={false}
               axisLine={{ stroke: "#e5e7eb" }}
             />
             <Tooltip content={<CustomTooltip />} />
 
-            <ReferenceLine
-              y={data[data.length - 1]?.p75 || 0}
-              stroke="#f97316"
-              strokeDasharray="5 5"
-              label={{ value: "Umbral Alarma", fontSize: 10, fill: "#f97316" }}
-            />
-
             <Area
               type="monotone"
-              dataKey="max"
+              dataKey="epidemia"
               stroke="transparent"
               fill="#fca5a5"
-              fillOpacity={0.3}
-              name="Zona Epidemia"
+              fillOpacity={0.2}
+              name="Epidemia"
             />
             <Area
               type="monotone"
-              dataKey="p75"
+              dataKey="alarma"
               stroke="transparent"
               fill="#fdba74"
               fillOpacity={0.3}
-              name="Zona Alarma"
+              name="Alarma"
             />
             <Area
               type="monotone"
-              dataKey="p50"
+              dataKey="seguridad"
               stroke="transparent"
-              fill="#86efac"
+              fill="#fde047"
               fillOpacity={0.3}
-              name="Zona Seguridad"
+              name="Seguridad"
             />
             <Area
               type="monotone"
-              dataKey="p25"
+              dataKey="exito"
               stroke="transparent"
-              fill="#93c5fd"
-              fillOpacity={0.3}
-              name="Zona Éxito"
+              fill="url(#colorExito)"
+              fillOpacity={0.5}
+              name="Éxito"
             />
 
-            <Area
+            <Line
               type="monotone"
-              dataKey="casos"
+              dataKey="casosActuales"
               stroke="#8b5cf6"
               strokeWidth={2}
-              fill="url(#colorCasos)"
-              name="Casos Actuales"
+              dot={{ fill: "#8b5cf6", r: 3 }}
+              name="Casos 2026"
             />
-          </AreaChart>
+          </ComposedChart>
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-4 flex flex-wrap gap-4 justify-center">
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-sm bg-blue-400" />
-          <span className="text-xs text-muted-foreground">Éxito (&lt; P25)</span>
+      <div className="mt-3 flex items-center justify-between text-xs">
+        <div className="flex gap-3">
+          <div className="flex items-center gap-1">
+            <div className="h-2 w-2 rounded-sm bg-green-500" />
+            <span className="text-muted-foreground">Éxito</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="h-2 w-2 rounded-sm bg-yellow-400" />
+            <span className="text-muted-foreground">Seguridad</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="h-2 w-2 rounded-sm bg-orange-400" />
+            <span className="text-muted-foreground">Alarma</span>
+          </div>
+          <div className="flex items-center gap-1">
+            <div className="h-2 w-2 rounded-sm bg-red-400" />
+            <span className="text-muted-foreground">Epidemia</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-sm bg-green-400" />
-          <span className="text-xs text-muted-foreground">Seguridad (P25-P50)</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-sm bg-orange-400" />
-          <span className="text-xs text-muted-foreground">Alarma (P50-P75)</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="h-3 w-3 rounded-sm bg-red-400" />
-          <span className="text-xs text-muted-foreground">Epidemia (&gt; P75)</span>
+        <div className="text-muted-foreground">
+          SE {semanaActual}: <span className="font-semibold text-foreground">{casosSemanaActual} casos</span>
         </div>
       </div>
     </div>
   )
-}
-
-interface CanalEndemicoDataGeneratorOptions {
-  anio: number
-  enfermedad?: string
-}
-
-export function generateMockCanalEndemicoData({
-  anio,
-}: CanalEndemicoDataGeneratorOptions): DatoCanalEndemico[] {
-  const data: DatoCanalEndemico[] = []
-  const casosBase = 50 + Math.random() * 100
-  const estacionalidad = (semana: number) => {
-    return Math.sin((semana / 52) * 2 * Math.PI) * 30
-  }
-
-  for (let semana = 1; semana <= 52; semana++) {
-    const casos = Math.max(0, Math.round(casosBase + estacionalidad(semana) + (Math.random() - 0.5) * 40))
-    const variacion = Math.random() * 0.3 + 0.85
-
-    data.push({
-      semana,
-      anio,
-      casos,
-      min: Math.round(casos * 0.3 * variacion),
-      p25: Math.round(casos * 0.5 * variacion),
-      p50: Math.round(casos * variacion),
-      p75: Math.round(casos * 1.5 * variacion),
-      max: Math.round(casos * 2 * variacion),
-    })
-  }
-
-  return data
 }

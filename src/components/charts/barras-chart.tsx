@@ -12,7 +12,7 @@ export function BarrasChart({ data, title, horizontal = false }: BarrasChartProp
   const defaultColors = ["#3b82f6", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6", "#ec4899", "#06b6d4", "#84cc16"]
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[200px]">
       {title && <h3 className="text-sm font-semibold mb-2 text-card-foreground">{title}</h3>}
       <ResponsiveContainer width="100%" height={200}>
         <BarChart data={data} layout={horizontal ? "vertical" : "horizontal"}>
