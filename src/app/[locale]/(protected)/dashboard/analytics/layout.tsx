@@ -14,11 +14,14 @@ export default function AnalyticsLayout({ children }: LayoutProps) {
     const t = useTranslations("Analytics")
 
     return (
-        <SidebarProvider>
+        <SidebarProvider
+            style={{ "--sidebar-width": "336px", "--sidebar-width-icon": "56px" } as React.CSSProperties}
+            className="overflow-x-hidden"
+        >
             <AnalyticsFilterSidebar />
             <SidebarInset className="bg-slate-50/50 shadow-inner">
                 <SiteHeader sectionTitle={t("title")} />
-                <div className="flex-1 flex flex-col p-4 md:p-6 overflow-hidden min-h-[calc(100vh-64px)]">
+                <div className="flex-1 flex flex-col overflow-hidden h-[calc(100vh-64px)]">
                     {children}
                 </div>
             </SidebarInset>

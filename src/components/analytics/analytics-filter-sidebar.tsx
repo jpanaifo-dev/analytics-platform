@@ -1,224 +1,291 @@
 "use client"
 
 import * as React from "react"
-import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import {
-    BarChart3,
-    Map as MapIcon,
-    LayoutGrid,
-    Grid3X3,
-    ChevronDown,
-    Activity,
-    Calendar,
-    Layers,
-    Users,
-    Percent
-} from "lucide-react"
-
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import {
     Sidebar,
     SidebarContent,
     SidebarHeader,
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarGroupContent,
-    SidebarMenu,
-    SidebarMenuItem,
-    SidebarMenuButton,
-    SidebarSeparator,
+    useSidebar,
 } from "@/components/ui/sidebar"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Slider } from "@/components/ui/slider"
+import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { useTranslations } from "next-intl"
+import { Slider } from "@/components/ui/slider"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import {
+    Menu,
+    ChevronRight,
+    Search,
+    Map as MapIcon,
+    LayoutGrid,
+    ArrowRightLeft,
+    Box,
+    BarChart,
+    Layers,
+    Grid3X3,
+    ScatterChart,
+    LineChart,
+    Network
+} from "lucide-react"
 
 export function AnalyticsFilterSidebar() {
-    const router = useRouter()
     const pathname = usePathname()
+    const router = useRouter()
     const searchParams = useSearchParams()
-    const t = useTranslations("Analytics")
+    const { setOpen } = useSidebar()
 
-    // Helper to update search params
-    const updateQuery = React.useCallback(
-        (key: string, value: string) => {
-            const params = new URLSearchParams(searchParams.toString())
-            if (value) {
-                params.set(key, value)
-            } else {
-                params.delete(key)
-            }
-            router.push(`${pathname}?${params.toString()}`)
-        },
-        [router, pathname, searchParams]
-    )
+    const [activeTab, setActiveTab] = React.useState("single")
 
+    // Get current filter values from URL
     const measure = searchParams.get("measure") || "dalys"
     const year = searchParams.get("year") || "2024"
-    const age = searchParams.get("age") || "all"
+    const age = searchParams.get("age") || "all ages"
     const sex = searchParams.get("sex") || "both"
     const metric = searchParams.get("metric") || "rate"
-    const cause = searchParams.get("cause") || "all"
+    const category = searchParams.get("category") || "risk"
+    const location = searchParams.get("location") || "Loreto"
+    const level = searchParams.get("level") || "0"
 
-    const views = [
-        { title: "Mapa", url: "/dashboard/analytics", icon: MapIcon },
-        { title: "Grid/Bar", url: "/dashboard/analytics/grid", icon: BarChart3 },
-        { title: "Heatmap", url: "/dashboard/analytics/heatmap", icon: Grid3X3 },
+    const updateQuery = (key: string, value: string) => {
+        const params = new URLSearchParams(searchParams.toString())
+        params.set(key, value)
+        router.push(`${pathname}?${params.toString()}`)
+    }
+
+    const viewTabs = [
+        { id: "single", label: "Single" },
+        { id: "explore", label: "Explore" },
+        { id: "compare", label: "Compare" },
+    ]
+
+    const chartViews = [
+        { id: "map", icon: MapIcon, label: "Map", path: "/dashboard/analytics" },
+        { id: "treemap", icon: LayoutGrid, label: "Treemap", path: "/dashboard/analytics/treemap" },
+        { id: "arrow", icon: ArrowRightLeft, label: "Arrow", path: "/dashboard/analytics/arrow" },
+        { id: "pyramid", icon: Box, label: "Pyramid", path: "/dashboard/analytics/pyramid" },
+        { id: "patterns", icon: Network, label: "Patterns", path: "/dashboard/analytics/patterns" },
+        { id: "risk", icon: BarChart, label: "Risk by cause", path: "/dashboard/analytics/risk" },
+        { id: "overlap", icon: Layers, label: "Overlap Map", path: "/dashboard/analytics/overlap" },
+        { id: "heatmap", icon: Grid3X3, label: "Heatmap", path: "/dashboard/analytics/heatmap" },
+        { id: "plot", icon: ScatterChart, label: "Plot", path: "/dashboard/analytics/plot" },
+        { id: "line", icon: LineChart, label: "Line", path: "/dashboard/analytics/line" },
+        { id: "decomposition", icon: BarChart, label: "Decomposition", path: "/dashboard/analytics/decomposition" },
     ]
 
     return (
-        <Sidebar variant="sidebar" className="border-r border-border/50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-            <SidebarHeader className="border-b px-6 py-4">
-                <div className="flex items-center gap-2">
-                    <Activity className="h-6 w-6 text-primary" />
-                    <span className="text-lg font-bold tracking-tight">Analytics Pro</span>
-                </div>
-            </SidebarHeader>
-            <SidebarContent className="p-4 gap-6">
-
-                {/* View Selection */}
-                <SidebarGroup>
-                    <SidebarGroupLabel className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
-                        Vista
-                    </SidebarGroupLabel>
-                    <SidebarGroupContent>
-                        <SidebarMenu className="gap-1">
-                            {views.map((view) => {
-                                const isActive = pathname.endsWith(view.url) || (pathname === view.url && view.url.endsWith("analytics"))
-                                return (
-                                    <SidebarMenuItem key={view.url}>
-                                        <SidebarMenuButton
-                                            asChild
-                                            isActive={isActive}
-                                            className="transition-all duration-200"
-                                        >
-                                            <a href={view.url} className="flex items-center gap-3">
-                                                <view.icon className={`h-4 w-4 ${isActive ? 'text-primary' : ''}`} />
-                                                <span className="font-medium">{view.title}</span>
-                                            </a>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuItem>
-                                )
-                            })}
-                        </SidebarMenu>
-                    </SidebarGroupContent>
-                </SidebarGroup>
-
-                <SidebarSeparator />
-
-                {/* Filters */}
-                <div className="space-y-6 px-2">
-
-                    {/* Measure Select */}
-                    <div className="space-y-2">
-                        <Label className="text-xs font-bold uppercase text-muted-foreground/70 flex items-center gap-2">
-                            <Layers className="h-3 w-3" /> Medida
-                        </Label>
-                        <Select value={measure} onValueChange={(v) => updateQuery("measure", v)}>
-                            <SelectTrigger className="w-full bg-accent/30 border-none hover:bg-accent/50 transition-colors">
-                                <SelectValue placeholder="Seleccionar medida" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="dalys">DALYs (Años de vida perdidos)</SelectItem>
-                                <SelectItem value="deaths">Muertes</SelectItem>
-                                <SelectItem value="ylds">Años con discapacidad</SelectItem>
-                                <SelectItem value="ylls">Años de vida perdidos</SelectItem>
-                            </SelectContent>
-                        </Select>
+        <Sidebar collapsible="none" variant="none" className="w-[336px] border-r">
+            <SidebarContent className="flex-row h-full overflow-hidden p-0 gap-0">
+                {/* Leftmost View Icons Strip */}
+                <div className="w-14 border-r flex flex-col items-center py-4 bg-slate-50 dark:bg-slate-900/50 shrink-0">
+                    <div className="mb-4 flex flex-col items-center gap-1">
+                        <Menu className="h-5 w-5 text-slate-400" />
+                        <span className="text-[8px] font-bold text-slate-400 uppercase">View</span>
                     </div>
-
-                    {/* Year Range */}
-                    <div className="space-y-3">
-                        <div className="flex items-center justify-between">
-                            <Label className="text-xs font-bold uppercase text-muted-foreground/70 flex items-center gap-2">
-                                <Calendar className="h-3 w-3" /> Año: <span className="text-primary">{year}</span>
-                            </Label>
-                        </div>
-                        <Slider
-                            value={[parseInt(year)]}
-                            min={1990}
-                            max={2024}
-                            step={1}
-                            onValueChange={([v]) => updateQuery("year", v.toString())}
-                            className="py-4"
-                        />
-                    </div>
-
-                    <SidebarSeparator className="opacity-50" />
-
-                    {/* Age Group */}
-                    <div className="space-y-2">
-                        <Label className="text-xs font-bold uppercase text-muted-foreground/70 flex items-center gap-2">
-                            <Users className="h-3 w-3" /> Edad
-                        </Label>
-                        <Select value={age} onValueChange={(v) => updateQuery("age", v)}>
-                            <SelectTrigger className="w-full bg-accent/30 border-none">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Todas las edades</SelectItem>
-                                <SelectItem value="under5">&lt; 5 años</SelectItem>
-                                <SelectItem value="5-14">5-14 años</SelectItem>
-                                <SelectItem value="15-49">15-49 años</SelectItem>
-                                <SelectItem value="50-69">50-69 años</SelectItem>
-                                <SelectItem value="70plus">70+ años</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-
-                    {/* Sex */}
-                    <div className="space-y-2">
-                        <Label className="text-xs font-bold uppercase text-muted-foreground/70">Sexo</Label>
-                        <div className="grid grid-cols-3 gap-1">
-                            {['both', 'male', 'female'].map((s) => (
+                    <div className="flex flex-col gap-2 w-full px-2">
+                        {chartViews.map((v) => {
+                            const isActive = pathname === v.path || (pathname === "/dashboard/analytics" && v.id === "map")
+                            return (
                                 <Button
-                                    key={s}
-                                    variant={sex === s ? "default" : "ghost"}
-                                    size="sm"
-                                    className={`capitalize text-[10px] h-8 ${sex === s ? 'bg-primary text-primary-foreground' : 'bg-transparent border-none'}`}
-                                    onClick={() => updateQuery("sex", s)}
+                                    key={v.id}
+                                    variant={isActive ? "default" : "ghost"}
+                                    size="icon"
+                                    className={cn(
+                                        "w-10 h-10 rounded-lg transition-all",
+                                        isActive ? "bg-[#003d33] hover:bg-[#002d26] text-white" : "text-slate-500"
+                                    )}
+                                    onClick={() => router.push(v.path)}
+                                    title={v.label}
                                 >
-                                    {s === 'both' ? 'Ambos' : s === 'male' ? 'Hombres' : 'Mujeres'}
+                                    <v.icon className="h-5 w-5" />
                                 </Button>
+                            )
+                        })}
+                    </div>
+                </div>
+
+                {/* Filters Content */}
+                <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-slate-950">
+                    <SidebarHeader className="p-0 border-b">
+                        <div className="px-4 py-2 bg-slate-50/50 border-b">
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Analysis View</span>
+                        </div>
+                        <div className="flex w-full">
+                            {viewTabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    className={cn(
+                                        "flex-1 py-3 text-sm font-medium border-b-2 transition-all",
+                                        activeTab === tab.id
+                                            ? "border-[#003d33] text-[#003d33] bg-teal-50/50"
+                                            : "border-transparent text-slate-500 hover:bg-slate-50"
+                                    )}
+                                    onClick={() => setActiveTab(tab.id)}
+                                >
+                                    {tab.label}
+                                </button>
                             ))}
                         </div>
-                    </div>
+                    </SidebarHeader>
 
-                    {/* Metric */}
-                    <div className="space-y-2">
-                        <Label className="text-xs font-bold uppercase text-muted-foreground/70 flex items-center gap-2">
-                            <Percent className="h-3 w-3" /> Métrica
-                        </Label>
-                        <Select value={metric} onValueChange={(v) => updateQuery("metric", v)}>
-                            <SelectTrigger className="w-full bg-accent/30 border-none">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="number">Número</SelectItem>
-                                <SelectItem value="rate">Tasa (por 100k)</SelectItem>
-                                <SelectItem value="percent">Porcentaje</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                    <SidebarContent className="p-4 space-y-6 overflow-y-auto custom-scrollbar">
+                        {/* Level Slider */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between text-[11px] font-bold uppercase text-slate-400">
+                                <span>Level</span>
+                                <span className="text-teal-700">Level {level}</span>
+                            </div>
+                            <Slider
+                                value={[parseInt(level)]}
+                                max={4}
+                                step={1}
+                                className="py-2"
+                                onValueChange={(v) => updateQuery("level", v[0].toString())}
+                            />
+                            <div className="flex justify-between text-[9px] text-slate-400 font-medium px-1">
+                                <span>0</span><span>1</span><span>2</span><span>3</span><span>4</span>
+                            </div>
+                        </div>
 
-                    {/* Cause */}
-                    <div className="space-y-2">
-                        <Label className="text-xs font-bold uppercase text-muted-foreground/70">Causa / Enfermedad</Label>
-                        <Select value={cause} onValueChange={(v) => updateQuery("cause", v)}>
-                            <SelectTrigger className="w-full bg-accent/30 border-none">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="all">Todas las causas</SelectItem>
-                                <SelectItem value="communicable">Enfermedades Transmisibles</SelectItem>
-                                <SelectItem value="non-communicable">Enfermedades No Transmisibles</SelectItem>
-                                <SelectItem value="injuries">Lesiones</SelectItem>
-                                <SelectItem value="dengue">Dengue</SelectItem>
-                                <SelectItem value="malaria">Malaria</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                        {/* Measure Segmented */}
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-bold uppercase text-slate-400">Measure</label>
+                            <div className="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-md">
+                                {["YLDs", "DALYs", "Deaths"].map((m) => (
+                                    <button
+                                        key={m}
+                                        className={cn(
+                                            "py-1.5 text-[11px] font-bold rounded transition-all",
+                                            measure === m.toLowerCase()
+                                                ? "bg-white dark:bg-slate-800 text-[#003d33] shadow-sm"
+                                                : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                        onClick={() => updateQuery("measure", m.toLowerCase())}
+                                    >
+                                        {m}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
 
+                        {/* Location Select */}
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-bold uppercase text-slate-400">Location</label>
+                            <Select value={location.toLowerCase()} onValueChange={(v) => updateQuery("location", v)}>
+                                <SelectTrigger className="h-9 text-xs border-slate-200 bg-white dark:bg-slate-900">
+                                    <SelectValue placeholder="Select location" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="loreto">Geresa Loreto (Total)</SelectItem>
+                                    <SelectItem value="maynas">Provincia Maynas</SelectItem>
+                                    <SelectItem value="alto-amazonas">Provincia Alto Amazonas</SelectItem>
+                                    <SelectItem value="requena">Provincia Requena</SelectItem>
+                                    <SelectItem value="ucayali-loreto">Provincia Ucayali</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <div className="flex items-center gap-1 text-[10px] text-blue-800 font-medium cursor-pointer hover:underline">
+                                <Search className="h-3 w-3" />
+                                <span>Use advanced settings</span>
+                            </div>
+                        </div>
+
+                        {/* Year Slider */}
+                        <div className="space-y-3">
+                            <div className="flex items-center justify-between text-[11px] font-bold uppercase text-slate-400">
+                                <span>Year</span>
+                                <span className="text-teal-700">{year}</span>
+                            </div>
+                            <Slider
+                                value={[parseInt(year)]}
+                                min={1990}
+                                max={2024}
+                                step={1}
+                                className="py-2"
+                                onValueChange={(v) => updateQuery("year", v[0].toString())}
+                            />
+                            <div className="flex justify-between text-[9px] text-slate-400 font-medium font-mono">
+                                <span>1990</span>
+                                <span>2007</span>
+                                <span>2024</span>
+                            </div>
+                        </div>
+
+                        {/* Age Segmented */}
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-bold uppercase text-slate-400">Age</label>
+                            <div className="grid grid-cols-2 gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-md">
+                                {["All ages", "Standard", "15-49", "70+"].map((a) => (
+                                    <button
+                                        key={a}
+                                        className={cn(
+                                            "py-1.5 text-[11px] font-bold rounded transition-all",
+                                            age === a.toLowerCase()
+                                                ? "bg-white dark:bg-slate-800 text-[#003d33] shadow-sm"
+                                                : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                        onClick={() => updateQuery("age", a.toLowerCase())}
+                                    >
+                                        {a}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Sex Segmented */}
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-bold uppercase text-slate-400">Sex</label>
+                            <div className="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-md">
+                                {["Male", "Female", "Both"].map((s) => (
+                                    <button
+                                        key={s}
+                                        className={cn(
+                                            "py-1.5 text-[11px] font-bold rounded transition-all",
+                                            sex === s.toLowerCase()
+                                                ? "bg-white dark:bg-slate-800 text-[#003d33] shadow-sm"
+                                                : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                        onClick={() => updateQuery("sex", s.toLowerCase())}
+                                    >
+                                        {s}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Metric Segmented */}
+                        <div className="space-y-3">
+                            <label className="text-[11px] font-bold uppercase text-slate-400">Metric</label>
+                            <div className="grid grid-cols-3 gap-1 bg-slate-100 dark:bg-slate-900 p-1 rounded-md">
+                                {[
+                                    { label: "#", val: "number" },
+                                    { label: "Rate", val: "rate" },
+                                    { label: "%", val: "percent" }
+                                ].map((m) => (
+                                    <button
+                                        key={m.val}
+                                        className={cn(
+                                            "py-1.5 text-[11px] font-bold rounded transition-all",
+                                            metric === m.val
+                                                ? "bg-white dark:bg-slate-800 text-[#003d33] shadow-sm"
+                                                : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                        onClick={() => updateQuery("metric", m.val)}
+                                    >
+                                        {m.label}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="pt-4 border-t space-y-2">
+                            <button className="text-[11px] text-blue-800 font-bold underline hover:no-underline">Take tour</button>
+                        </div>
+                    </SidebarContent>
                 </div>
             </SidebarContent>
         </Sidebar>
