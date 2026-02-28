@@ -1,0 +1,74 @@
+{
+    "Common": {
+        "loading": "Loading...",
+        "menu": "Menu",
+        "dashboard": "Dashboard",
+        "login": "Login",
+        "logout": "Logout",
+        "back": "Back",
+        "loggingIn": "Logging in...",
+        "footer": "Epidemiological Surveillance Platform - MINSA",
+        "rightsReserved": "All rights reserved."
+    },
+    "Login": {
+        "title": "Surveillance Platform",
+        "description": "Enter your credentials to access",
+        "email": "Email Address",
+        "password": "Password",
+        "submit": "Login",
+        "error": "Incorrect credentials. Please try again.",
+        "credentialsHint": "Credentials: admin@admin.com / Admin123"
+    },
+    "Sidebar": {
+        "vigilancia": "Surveillance",
+        "salaSituacional": "Situational Room",
+        "resumen": "Summary",
+        "alertasActivas": "Active Alerts",
+        "listaCasos": "Case List",
+        "nuevaNotificacion": "New Notification",
+        "buscarCie10": "Search ICD-10",
+        "analisisEspacial": "Spatial Analysis",
+        "mapaCalor": "Heat Map",
+        "distribucionEess": "Distribution by Health Facility",
+        "prediccion": "Prediction",
+        "proyecciones": "Projections",
+        "modelosIa": "AI Models",
+        "mapas": "Maps",
+        "distribucionGeografica": "Geographical Distribution",
+        "porProvincia": "By Province",
+        "reportes": "Reports",
+        "generarReportes": "Generate Reports",
+        "historial": "History"
+    },
+    "Dashboard": {
+        "title": "Situational Room",
+        "kpis": {
+            "casosNotificados": "Notified Cases",
+            "casosConfirmados": "Confirmed Cases",
+            "alertasActivas": "Active Alerts",
+            "establecimientos": "Health Facilities"
+        },
+        "charts": {
+            "canalEndemico": "Endemic Channel - SARI",
+            "alertasRecientes": "Recent Alerts"
+        }
+    },
+    "User": {
+        "upgrade": "Upgrade to Pro",
+        "account": "Account",
+        "billing": "Billing",
+        "notifications": "Notifications",
+        "logout": "Log out"
+    },
+    "Alerts": {
+        "panelTitle": "Alerts Panel",
+        "totalActive": "Total Active",
+        "emergency": "Emergency",
+        "alert": "Alert",
+        "noAlerts": "No active alerts",
+        "noAlertsDesc": "No anomalous epidemiological situations were detected",
+        "threshold": "Threshold",
+        "cases": "cases",
+        "case": "case"
+    }
+}

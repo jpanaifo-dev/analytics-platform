@@ -1,7 +1,7 @@
 import { Separator } from '@/components/ui/separator'
 import { SidebarTrigger } from '@/components/ui/sidebar'
-
 import { ModeToggle } from '@/components/mode-toggle'
+import { LocaleSwitcher } from '@/components/locale-switcher'
 
 interface SiteHeaderProps {
   sectionTitle?: string
@@ -18,6 +18,7 @@ export function SiteHeader({ sectionTitle }: SiteHeaderProps) {
         />
         <h1 className="text-base font-medium">{sectionTitle || 'Dashboard'}</h1>
         <div className="ml-auto flex items-center gap-2">
+          <LocaleSwitcher />
           <ModeToggle />
         </div>
       </div>
