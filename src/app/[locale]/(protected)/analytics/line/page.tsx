@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 
-export default function LinePage() {
+function LineChartContent() {
     const searchParams = useSearchParams()
     const location = searchParams.get("location") || "Loreto"
     const measure = (searchParams.get("measure") || "DALYs").toUpperCase()
@@ -85,3 +85,12 @@ export default function LinePage() {
         </div>
     )
 }
+
+export default function LinePage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <LineChartContent />
+        </React.Suspense>
+    )
+}
+

@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 
-export default function AnalyticsHeatmapPage() {
+function HeatmapChartContent() {
     const searchParams = useSearchParams()
     const year = searchParams.get("year") || "2024"
     const location = searchParams.get("location") || "Loreto"
@@ -81,3 +81,12 @@ export default function AnalyticsHeatmapPage() {
         </div>
     )
 }
+
+export default function AnalyticsHeatmapPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <HeatmapChartContent />
+        </React.Suspense>
+    )
+}
+

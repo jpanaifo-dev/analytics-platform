@@ -7,7 +7,7 @@ import { BaseChart } from "@/components/analytics/charts/base-chart"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowUpRight, ArrowDownRight, TrendingUp } from "lucide-react"
 
-export default function AnalyticsGridPage() {
+function GridChartContent() {
     const searchParams = useSearchParams()
     const measure = searchParams.get("measure") || "dalys"
     const year = searchParams.get("year") || "2024"
@@ -63,7 +63,7 @@ export default function AnalyticsGridPage() {
 
     return (
         <div className="flex flex-col gap-6 h-full overflow-y-auto">
-            <Card className="flex flex-col shadow-sm border-none bg-white/50 dark:bg-slate-900">
+            <Card className="flex flex-col shadow-sm border-none bg-white/50 dark:bg-slate-900 shrink-0">
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>
@@ -77,7 +77,7 @@ export default function AnalyticsGridPage() {
                 </CardContent>
             </Card>
 
-            <Card className="shadow-sm border-none bg-white/50 dark:bg-slate-900">
+            <Card className="shadow-sm border-none bg-white/50 dark:bg-slate-900 mb-6 shrink-0">
                 <CardHeader>
                     <CardTitle className="text-xl font-bold">Resumen Detallado</CardTitle>
                     <CardDescription>Datos comparativos por {measure}</CardDescription>
@@ -113,3 +113,12 @@ export default function AnalyticsGridPage() {
         </div>
     )
 }
+
+export default function AnalyticsGridPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <GridChartContent />
+        </React.Suspense>
+    )
+}
+

@@ -8,7 +8,7 @@ import { Info, Search } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { cn } from "@/lib/utils"
 
-export default function RiskByCausePage() {
+function RiskByCauseContent() {
     const searchParams = useSearchParams()
     const measure = (searchParams.get("measure") || "DALYs").toUpperCase()
     const year = searchParams.get("year") || "2023"
@@ -164,3 +164,12 @@ export default function RiskByCausePage() {
         </div>
     )
 }
+
+export default function RiskByCausePage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <RiskByCauseContent />
+        </React.Suspense>
+    )
+}
+

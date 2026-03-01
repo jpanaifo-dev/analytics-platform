@@ -8,7 +8,7 @@ import { Info, MapPin } from "lucide-react"
 import * as echarts from "echarts"
 import loretoGeoJSON from "@/lib/maps/loreto.json"
 
-export default function MapPage() {
+function MapChartContent() {
     const searchParams = useSearchParams()
     const year = searchParams.get("year") || "2024"
     const location = searchParams.get("location") || "Loreto"
@@ -83,7 +83,7 @@ export default function MapPage() {
                 </div>
             </div>
 
-            <div className="flex-1 flex flex-col p-6">
+            <div className="flex-1 p-6 flex flex-col">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h2 className="text-xl font-bold">Geographic Distribution</h2>
@@ -121,3 +121,12 @@ export default function MapPage() {
         </div>
     )
 }
+
+export default function MapPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <MapChartContent />
+        </React.Suspense>
+    )
+}
+

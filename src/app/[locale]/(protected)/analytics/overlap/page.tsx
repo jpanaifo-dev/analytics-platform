@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 
-export default function OverlapPage() {
+function OverlapChartContent() {
     const searchParams = useSearchParams()
     const location = searchParams.get("location") || "Loreto"
     const year = searchParams.get("year") || "2023"
@@ -57,3 +57,12 @@ export default function OverlapPage() {
         </div>
     )
 }
+
+export default function OverlapPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <OverlapChartContent />
+        </React.Suspense>
+    )
+}
+

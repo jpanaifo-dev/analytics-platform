@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 
-export default function PyramidPage() {
+function PyramidChartContent() {
     const searchParams = useSearchParams()
     const year = searchParams.get("year") || "2023"
     const location = searchParams.get("location") || "Loreto"
@@ -93,3 +93,12 @@ export default function PyramidPage() {
         </div>
     )
 }
+
+export default function PyramidPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <PyramidChartContent />
+        </React.Suspense>
+    )
+}
+

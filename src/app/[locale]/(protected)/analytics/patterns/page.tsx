@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 
-export default function PatternsPage() {
+function PatternsChartContent() {
     const searchParams = useSearchParams()
     const location = searchParams.get("location") || "Loreto"
     const year = searchParams.get("year") || "2023"
@@ -61,3 +61,12 @@ export default function PatternsPage() {
         </div>
     )
 }
+
+export default function PatternsPage() {
+    return (
+        <React.Suspense fallback={<div className="flex items-center justify-center h-full">Loading...</div>}>
+            <PatternsChartContent />
+        </React.Suspense>
+    )
+}
+
