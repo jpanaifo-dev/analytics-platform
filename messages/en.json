@@ -1,0 +1,146 @@
+{
+    "Common": {
+        "loading": "Loading...",
+        "menu": "Menu",
+        "dashboard": "Dashboard",
+        "login": "Login",
+        "logout": "Logout",
+        "back": "Back",
+        "loggingIn": "Logging in...",
+        "footer": "Epidemiological Surveillance Platform - MINSA",
+        "rightsReserved": "All rights reserved."
+    },
+    "Login": {
+        "title": "Surveillance Platform",
+        "description": "Enter your credentials to access",
+        "email": "Email Address",
+        "password": "Password",
+        "submit": "Login",
+        "error": "Incorrect credentials. Please try again.",
+        "credentialsHint": "Credentials: admin@admin.com / Admin123"
+    },
+    "Sidebar": {
+        "vigilancia": "Surveillance",
+        "salaSituacional": "Situational Room",
+        "resumen": "Summary",
+        "alertasActivas": "Active Alerts",
+        "listaCasos": "Case List",
+        "nuevaNotificacion": "New Notification",
+        "buscarCie10": "Search ICD-10",
+        "analisisEspacial": "Spatial Analysis",
+        "mapaCalor": "Heat Map",
+        "distribucionEess": "Distribution by Health Facility",
+        "prediccion": "Prediction",
+        "proyecciones": "Projections",
+        "modelosIa": "AI Models",
+        "mapas": "Maps",
+        "distribucionGeografica": "Geographical Distribution",
+        "porProvincia": "By Province",
+        "reportes": "Reports",
+        "generarReportes": "Generate Reports",
+        "historial": "History"
+    },
+    "Dashboard": {
+        "title": "Situational Room",
+        "kpis": {
+            "casosNotificados": "Notified Cases",
+            "casosConfirmados": "Confirmed Cases",
+            "alertasActivas": "Active Alerts",
+            "establecimientos": "Health Facilities"
+        },
+        "charts": {
+            "canalEndemico": "Endemic Channel - SARI",
+            "alertasRecientes": "Recent Alerts"
+        }
+    },
+    "User": {
+        "upgrade": "Upgrade to Pro",
+        "account": "Account",
+        "billing": "Billing",
+        "notifications": "Notifications",
+        "logout": "Log out"
+    },
+    "Alerts": {
+        "panelTitle": "Alerts Panel",
+        "totalActive": "Total Active",
+        "emergency": "Emergency",
+        "alert": "Alert",
+        "noAlerts": "No active alerts",
+        "noAlertsDesc": "No anomalous epidemiological situations were detected",
+        "threshold": "Threshold",
+        "cases": "cases",
+        "case": "case"
+    },
+    "Analytics": {
+        "title": "Advanced Analytics",
+        "measures": {
+            "dalys": "DALYs",
+            "deaths": "Deaths",
+            "ylds": "YLDs",
+            "ylls": "YLLs",
+            "dalysShort": "DALYs",
+            "deathsShort": "Deaths",
+            "yldsShort": "YLDs",
+            "yllsShort": "YLLs"
+        },
+        "filters": {
+            "measure": "Measure",
+            "year": "Year",
+            "age": "Age",
+            "sex": "Sex",
+            "metric": "Metric",
+            "cause": "Cause / Disease",
+            "level": "Level",
+            "location": "Location"
+        },
+        "metrics": {
+            "number": "Number",
+            "rate": "Rate (per 100k)",
+            "percent": "Percentage"
+        },
+        "views": {
+            "map": "Map",
+            "treemap": "Treemap",
+            "arrow": "Arrow",
+            "pyramid": "Pyramid",
+            "patterns": "Patterns",
+            "risk": "Risk by cause",
+            "overlap": "Overlap Map",
+            "heatmap": "Heatmap",
+            "plot": "Plot",
+            "line": "Line",
+            "decomposition": "Decomposition"
+        },
+        "tabs": {
+            "single": "Single",
+            "explore": "Explore",
+            "compare": "Compare"
+        },
+        "advanced": "Use advanced settings",
+        "tour": "Take tour",
+        "locations": {
+            "loreto": "Geresa Loreto (Total)",
+            "maynas": "Maynas Province",
+            "alto-amazonas": "Alto Amazonas Province",
+            "loreto-prov": "Loreto Province",
+            "mariscal-ramon-castilla": "Mariscal Ramón Castilla Province",
+            "requena": "Requena Province",
+            "ucayali-loreto": "Ucayali Province",
+            "datem-del-maranon": "Datem del Marañón Province",
+            "putumayo": "Putumayo Province"
+        },
+        "ages": {
+            "all ages": "All ages",
+            "standard": "Standard",
+            "15-49": "15-49",
+            "70+": "70+"
+        },
+        "sexes": {
+            "male": "Male",
+            "female": "Female",
+            "both": "Both"
+        },
+        "analysisView": "ANALYSIS VIEW",
+        "view": "VIEW"
+    }
+}

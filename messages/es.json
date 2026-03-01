@@ -1,0 +1,146 @@
+{
+    "Common": {
+        "loading": "Cargando...",
+        "menu": "Menú",
+        "dashboard": "Panel de Control",
+        "login": "Iniciar Sesión",
+        "logout": "Cerrar Sesión",
+        "back": "Volver",
+        "loggingIn": "Iniciando sesión...",
+        "footer": "Plataforma de Vigilancia Epidemiológica - MINSA",
+        "rightsReserved": "Todos los derechos reservados."
+    },
+    "Login": {
+        "title": "Plataforma de Vigilancia",
+        "description": "Ingrese sus credenciales para acceder",
+        "email": "Correo Electrónico",
+        "password": "Contraseña",
+        "submit": "Iniciar Sesión",
+        "error": "Credenciales incorrectas. Intente nuevamente.",
+        "credentialsHint": "Credenciales: admin@admin.com / Admin123"
+    },
+    "Sidebar": {
+        "vigilancia": "Vigilancia",
+        "salaSituacional": "Sala Situacional",
+        "resumen": "Resumen",
+        "alertasActivas": "Alertas Activas",
+        "listaCasos": "Lista de Casos",
+        "nuevaNotificacion": "Nueva Notificación",
+        "buscarCie10": "Buscar CIE-10",
+        "analisisEspacial": "Análisis Espacial",
+        "mapaCalor": "Mapa de Calor",
+        "distribucionEess": "Distribución por EESS",
+        "prediccion": "Predicción",
+        "proyecciones": "Proyecciones",
+        "modelosIa": "Modelos IA",
+        "mapas": "Mapas",
+        "distribucionGeografica": "Distribución Geográfica",
+        "porProvincia": "Por Provincia",
+        "reportes": "Reportes",
+        "generarReportes": "Generar Reportes",
+        "historial": "Historial"
+    },
+    "Dashboard": {
+        "title": "Sala Situacional",
+        "kpis": {
+            "casosNotificados": "Casos Notificados",
+            "casosConfirmados": "Casos Confirmados",
+            "alertasActivas": "Alertas Activas",
+            "establecimientos": "Establecimientos"
+        },
+        "charts": {
+            "canalEndemico": "Canal Endémico - IRAG",
+            "alertasRecientes": "Alertas Recientes"
+        }
+    },
+    "User": {
+        "upgrade": "Mejorar a Pro",
+        "account": "Cuenta",
+        "billing": "Facturación",
+        "notifications": "Notificaciones",
+        "logout": "Cerrar Sesión"
+    },
+    "Alerts": {
+        "panelTitle": "Panel de Alertas",
+        "totalActive": "Total Activas",
+        "emergency": "Emergencia",
+        "alert": "Alerta",
+        "noAlerts": "Sin alertas activas",
+        "noAlertsDesc": "No se detectaron situaciones epidemiológicas anómalas",
+        "threshold": "Umbral",
+        "cases": "casos",
+        "case": "caso"
+    },
+    "Analytics": {
+        "title": "Análisis Avanzado",
+        "measures": {
+            "dalys": "DALYs (Años de vida perdidos)",
+            "deaths": "Muertes",
+            "ylds": "Años con discapacidad",
+            "ylls": "Años de vida perdidos",
+            "dalysShort": "DALYs",
+            "deathsShort": "Muertes",
+            "yldsShort": "YLDs",
+            "yllsShort": "YLLs"
+        },
+        "filters": {
+            "measure": "Medida",
+            "year": "Año",
+            "age": "Edad",
+            "sex": "Sexo",
+            "metric": "Métrica",
+            "cause": "Causa / Enfermedad",
+            "level": "Nivel",
+            "location": "Ubicación"
+        },
+        "metrics": {
+            "number": "Número",
+            "rate": "Tasa (por 100k)",
+            "percent": "Porcentaje"
+        },
+        "views": {
+            "map": "Mapa",
+            "treemap": "Mapa de Árbol",
+            "arrow": "Flechas",
+            "pyramid": "Pirámide",
+            "patterns": "Patrones",
+            "risk": "Riesgo por Causa",
+            "overlap": "Mapa Superpuesto",
+            "heatmap": "Mapa de Calor",
+            "plot": "Gráfico de Puntos",
+            "line": "Líneas",
+            "decomposition": "Descomposición"
+        },
+        "tabs": {
+            "single": "Individual",
+            "explore": "Explorar",
+            "compare": "Comparar"
+        },
+        "advanced": "Usar ajustes avanzados",
+        "tour": "Iniciar recorrido",
+        "locations": {
+            "loreto": "Geresa Loreto (Total)",
+            "maynas": "Provincia Maynas",
+            "alto-amazonas": "Provincia Alto Amazonas",
+            "loreto-prov": "Provincia Loreto",
+            "mariscal-ramon-castilla": "Provincia Mariscal Ramón Castilla",
+            "requena": "Provincia Requena",
+            "ucayali-loreto": "Provincia Ucayali",
+            "datem-del-maranon": "Provincia Datem del Marañón",
+            "putumayo": "Provincia Putumayo"
+        },
+        "ages": {
+            "all ages": "Todas las edades",
+            "standard": "Estándar",
+            "15-49": "15-49",
+            "70+": "70+"
+        },
+        "sexes": {
+            "male": "Masculino",
+            "female": "Femenino",
+            "both": "Ambos"
+        },
+        "analysisView": "VISTA DE ANÁLISIS",
+        "view": "VER"
+    }
+}
