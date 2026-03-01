@@ -8,7 +8,6 @@ import {
   Brain,
   Activity,
   FileText,
-  BarChart3,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -21,130 +20,133 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useTranslations } from 'next-intl'
 
-const data = {
-  user: {
+export function EpidemiologySidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const t = useTranslations('Sidebar')
+
+  const user = {
     name: "Dr. Juan Pérez",
     email: "j.perez@minsa.gob.pe",
     avatar: "",
-  },
-  teams: [
+  }
+
+  const teams = [
     {
       name: "MINSA",
       logo: Activity,
       plan: "Dirección de Epidemiología",
     },
-  ],
-  navMain: [
+  ]
+
+  const navMain = [
     {
-      title: "Sala Situacional",
+      title: t('salaSituacional'),
       url: "/dashboard",
       icon: LayoutDashboard,
       isActive: true,
       items: [
         {
-          title: "Resumen",
+          title: t('resumen'),
           url: "/dashboard",
         },
         {
-          title: "Alertas Activas",
+          title: t('alertasActivas'),
           url: "/dashboard/alertas",
         },
       ],
     },
     {
-      title: "Vigilancia",
+      title: t('vigilancia'),
       url: "/dashboard/vigilancia",
       icon: FileSearch,
       items: [
         {
-          title: "Lista de Casos",
+          title: t('listaCasos'),
           url: "/dashboard/vigilancia",
         },
         {
-          title: "Nueva Notificación",
+          title: t('nuevaNotificacion'),
           url: "/dashboard/vigilancia/notificar",
         },
         {
-          title: "Buscar CIE-10",
+          title: t('buscarCie10'),
           url: "/dashboard/vigilancia/buscar",
         },
       ],
     },
     {
-      title: "Análisis Espacial",
+      title: t('analisisEspacial'),
       url: "/dashboard/espacial",
       icon: Map,
       items: [
         {
-          title: "Mapa de Calor",
+          title: t('mapaCalor'),
           url: "/dashboard/espacial",
         },
         {
-          title: "Distribucion por EESS",
+          title: t('distribucionEess'),
           url: "/dashboard/espacial/establecimientos",
         },
       ],
     },
     {
-      title: "Predicción",
+      title: t('prediccion'),
       url: "/dashboard/prediccion",
       icon: Brain,
       items: [
         {
-          title: "Proyecciones",
+          title: t('proyecciones'),
           url: "/dashboard/prediccion",
         },
         {
-          title: "Modelos IA",
+          title: t('modelosIa'),
           url: "/dashboard/prediccion/modelos",
         },
       ],
     },
     {
-      title: "Mapas",
+      title: t('mapas'),
       url: "/dashboard/mapas",
       icon: Map,
       items: [
         {
-          title: "Distribución Geográfica",
+          title: t('distribucionGeografica'),
           url: "/dashboard/mapas",
         },
         {
-          title: "Por Provincia",
+          title: t('porProvincia'),
           url: "/dashboard/mapas?vista=provincia",
         },
       ],
     },
     {
-      title: "Reportes",
+      title: t('reportes'),
       url: "/dashboard/reportes",
       icon: FileText,
       items: [
         {
-          title: "Generar Reportes",
+          title: t('generarReportes'),
           url: "/dashboard/reportes",
         },
         {
-          title: "Historial",
+          title: t('historial'),
           url: "/dashboard/reportes?tab=historial",
         },
       ],
     },
-  ],
-}
+  ]
 
-export function EpidemiologySidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher teams={teams} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} label="Vigilancia" />
+        <NavMain items={navMain} label={t('vigilancia')} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

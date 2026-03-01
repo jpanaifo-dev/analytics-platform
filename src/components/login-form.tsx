@@ -1,17 +1,21 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@/navigation"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { AlertCircle } from "lucide-react"
+import { useTranslations } from 'next-intl'
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"form">) {
   const router = useRouter()
+  const t = useTranslations('Login')
+  const tCommon = useTranslations('Common')
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
@@ -31,7 +35,7 @@ export function LoginForm({
       localStorage.setItem("user", JSON.stringify({ email, name: "Administrador" }))
       router.push("/dashboard")
     } else {
-      setError("Credenciales incorrectas. Intente nuevamente.")
+      setError(t('error'))
     }
 
     setLoading(false)
@@ -40,9 +44,9 @@ export function LoginForm({
   return (
     <form onSubmit={handleSubmit} className={cn("flex flex-col gap-6", className)}>
       <div className="flex flex-col items-center gap-1 text-center">
-        <h1 className="text-2xl font-bold">Plataforma de Vigilancia</h1>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
         <p className="text-muted-foreground text-sm">
-          Ingrese sus credenciales para acceder
+          {t('description')}
         </p>
       </div>
 
@@ -54,35 +58,35 @@ export function LoginForm({
       )}
 
       <div className="space-y-2">
-        <label htmlFor="email" className="text-sm font-medium">Correo Electrónico</label>
-        <Input 
-          id="email" 
-          type="email" 
-          placeholder="admin@admin.com" 
+        <label htmlFor="email" className="text-sm font-medium">{t('email')}</label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="admin@admin.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          required 
+          required
         />
       </div>
 
       <div className="space-y-2">
-        <label htmlFor="password" className="text-sm font-medium">Contraseña</label>
-        <Input 
-          id="password" 
-          type="password" 
+        <label htmlFor="password" className="text-sm font-medium">{t('password')}</label>
+        <Input
+          id="password"
+          type="password"
           placeholder="Admin123"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required 
+          required
         />
       </div>
 
       <Button type="submit" disabled={loading} className="w-full">
-        {loading ? "Iniciando sesión..." : "Iniciar Sesión"}
+        {loading ? tCommon('loggingIn') : t('submit')}
       </Button>
 
       <p className="text-xs text-center text-muted-foreground">
-        Credenciales: admin@admin.com / Admin123
+        {t('credentialsHint')}
       </p>
     </form>
   )
