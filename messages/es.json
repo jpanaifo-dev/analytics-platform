@@ -77,7 +77,11 @@
             "dalys": "DALYs (Años de vida perdidos)",
             "deaths": "Muertes",
             "ylds": "Años con discapacidad",
-            "ylls": "Años de vida perdidos"
+            "ylls": "Años de vida perdidos",
+            "dalysShort": "DALYs",
+            "deathsShort": "Muertes",
+            "yldsShort": "YLDs",
+            "yllsShort": "YLLs"
         },
         "filters": {
             "measure": "Medida",
@@ -85,7 +89,9 @@
             "age": "Edad",
             "sex": "Sexo",
             "metric": "Métrica",
-            "cause": "Causa / Enfermedad"
+            "cause": "Causa / Enfermedad",
+            "level": "Nivel",
+            "location": "Ubicación"
         },
         "metrics": {
             "number": "Número",
@@ -94,8 +100,47 @@
         },
         "views": {
             "map": "Mapa",
-            "grid": "Grid/Bar",
-            "heatmap": "Heatmap"
-        }
+            "treemap": "Mapa de Árbol",
+            "arrow": "Flechas",
+            "pyramid": "Pirámide",
+            "patterns": "Patrones",
+            "risk": "Riesgo por Causa",
+            "overlap": "Mapa Superpuesto",
+            "heatmap": "Mapa de Calor",
+            "plot": "Gráfico de Puntos",
+            "line": "Líneas",
+            "decomposition": "Descomposición"
+        },
+        "tabs": {
+            "single": "Individual",
+            "explore": "Explorar",
+            "compare": "Comparar"
+        },
+        "advanced": "Usar ajustes avanzados",
+        "tour": "Iniciar recorrido",
+        "locations": {
+            "loreto": "Geresa Loreto (Total)",
+            "maynas": "Provincia Maynas",
+            "alto-amazonas": "Provincia Alto Amazonas",
+            "loreto-prov": "Provincia Loreto",
+            "mariscal-ramon-castilla": "Provincia Mariscal Ramón Castilla",
+            "requena": "Provincia Requena",
+            "ucayali-loreto": "Provincia Ucayali",
+            "datem-del-maranon": "Provincia Datem del Marañón",
+            "putumayo": "Provincia Putumayo"
+        },
+        "ages": {
+            "all ages": "Todas las edades",
+            "standard": "Estándar",
+            "15-49": "15-49",
+            "70+": "70+"
+        },
+        "sexes": {
+            "male": "Masculino",
+            "female": "Femenino",
+            "both": "Ambos"
+        },
+        "analysisView": "VISTA DE ANÁLISIS",
+        "view": "VER"
     }
 }

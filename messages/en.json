@@ -70,5 +70,77 @@
         "threshold": "Threshold",
         "cases": "cases",
         "case": "case"
+    },
+    "Analytics": {
+        "title": "Advanced Analytics",
+        "measures": {
+            "dalys": "DALYs",
+            "deaths": "Deaths",
+            "ylds": "YLDs",
+            "ylls": "YLLs",
+            "dalysShort": "DALYs",
+            "deathsShort": "Deaths",
+            "yldsShort": "YLDs",
+            "yllsShort": "YLLs"
+        },
+        "filters": {
+            "measure": "Measure",
+            "year": "Year",
+            "age": "Age",
+            "sex": "Sex",
+            "metric": "Metric",
+            "cause": "Cause / Disease",
+            "level": "Level",
+            "location": "Location"
+        },
+        "metrics": {
+            "number": "Number",
+            "rate": "Rate (per 100k)",
+            "percent": "Percentage"
+        },
+        "views": {
+            "map": "Map",
+            "treemap": "Treemap",
+            "arrow": "Arrow",
+            "pyramid": "Pyramid",
+            "patterns": "Patterns",
+            "risk": "Risk by cause",
+            "overlap": "Overlap Map",
+            "heatmap": "Heatmap",
+            "plot": "Plot",
+            "line": "Line",
+            "decomposition": "Decomposition"
+        },
+        "tabs": {
+            "single": "Single",
+            "explore": "Explore",
+            "compare": "Compare"
+        },
+        "advanced": "Use advanced settings",
+        "tour": "Take tour",
+        "locations": {
+            "loreto": "Geresa Loreto (Total)",
+            "maynas": "Maynas Province",
+            "alto-amazonas": "Alto Amazonas Province",
+            "loreto-prov": "Loreto Province",
+            "mariscal-ramon-castilla": "Mariscal Ramón Castilla Province",
+            "requena": "Requena Province",
+            "ucayali-loreto": "Ucayali Province",
+            "datem-del-maranon": "Datem del Marañón Province",
+            "putumayo": "Putumayo Province"
+        },
+        "ages": {
+            "all ages": "All ages",
+            "standard": "Standard",
+            "15-49": "15-49",
+            "70+": "70+"
+        },
+        "sexes": {
+            "male": "Male",
+            "female": "Female",
+            "both": "Both"
+        },
+        "analysisView": "ANALYSIS VIEW",
+        "view": "VIEW"
     }
 }

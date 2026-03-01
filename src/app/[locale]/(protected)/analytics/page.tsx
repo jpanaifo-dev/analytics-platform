@@ -5,30 +5,42 @@ import { useSearchParams } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { BaseChart } from "@/components/analytics/charts/base-chart"
 import { Info, MapPin } from "lucide-react"
+import * as echarts from "echarts"
+import loretoGeoJSON from "@/lib/maps/loreto.json"
 
 export default function MapPage() {
     const searchParams = useSearchParams()
-    const scenario = searchParams.get("scenario") || "baseline"
     const year = searchParams.get("year") || "2024"
     const location = searchParams.get("location") || "Loreto"
     const measure = (searchParams.get("measure") || "DALYs").toUpperCase()
 
-    // Loreto Provinces data
+    // Register map if not already registered
+    React.useEffect(() => {
+        if (!echarts.getMap("Loreto")) {
+            echarts.registerMap("Loreto", loretoGeoJSON as any)
+        }
+    }, [])
+
+    // Loreto Provinces data - normalized names to match GeoJSON (UPPERCASE)
     const provinceData = [
-        { name: "Maynas", value: 85 },
-        { name: "Alto Amazonas", value: 65 },
-        { name: "Datem del Marañón", value: 45 },
-        { name: "Loreto", value: 72 },
-        { name: "Mariscal Ramón Castilla", value: 38 },
-        { name: "Putumayo", value: 20 },
-        { name: "Requena", value: 54 },
-        { name: "Ucayali", value: 41 }
+        { name: "MAYNAS", displayName: "Maynas", value: 85 },
+        { name: "ALTO AMAZONAS", displayName: "Alto Amazonas", value: 65 },
+        { name: "DATEM DEL MARAÑON", displayName: "Datem del Marañón", value: 45 },
+        { name: "LORETO", displayName: "Loreto", value: 72 },
+        { name: "MARISCAL RAMON CASTILLA", displayName: "Mariscal Ramón Castilla", value: 38 },
+        { name: "PUTUMAYO", displayName: "Putumayo", value: 20 },
+        { name: "REQUENA", displayName: "Requena", value: 54 },
+        { name: "UCAYALI", displayName: "Ucayali", value: 41 }
     ]
 
     const chartOption = {
         tooltip: {
             trigger: 'item',
-            formatter: '{b}: {c}'
+            formatter: (params: any) => {
+                const data = provinceData.find(p => p.name === params.name);
+                const name = data ? data.displayName : params.name;
+                return `${name}: ${params.value}%`;
+            }
         },
         visualMap: {
             min: 0,
@@ -45,14 +57,13 @@ export default function MapPage() {
             {
                 name: 'Geresa Loreto',
                 type: 'map',
-                map: 'world', // Using world as placeholder, ideally Loreto GeoJSON
+                map: 'Loreto',
                 roam: true,
                 emphasis: {
                     label: { show: true }
                 },
                 data: provinceData.map(p => ({
-                    // Mapping these to some world countries for visual effect in placeholder
-                    name: p.name === 'Maynas' ? 'Peru' : p.name,
+                    name: p.name,
                     value: p.value
                 }))
             }
@@ -60,11 +71,11 @@ export default function MapPage() {
     }
 
     return (
-        <div className="flex flex-col h-full bg-white dark:bg-slate-950 overflow-hidden relative">
+        <div className="flex flex-col h-full overflow-hidden relative">
             {/* Top Bar Status */}
-            <div className="flex items-center justify-between px-6 py-2 border-b bg-slate-50/50">
-                <div className="text-[13px] font-medium text-slate-600 flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-teal-700" />
+            <div className="flex items-center justify-between px-6 py-2 border-b">
+                <div className="text-[13px] font-medium text-slate-600 dark:text-slate-200 flex items-center gap-2">
+                    <MapPin className="h-4 w-4 text-teal-700 dark:text-teal-200" />
                     <span>Loreto, {location === 'Loreto' ? 'All Provinces' : location}, {year}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -75,13 +86,13 @@ export default function MapPage() {
             <div className="flex-1 flex flex-col p-6">
                 <div className="flex items-center justify-between mb-4">
                     <div>
-                        <h2 className="text-xl font-bold text-[#003d33]">Geographic Distribution</h2>
-                        <p className="text-sm text-slate-500">Analysis of {measure} across Geresa Loreto provinces</p>
+                        <h2 className="text-xl font-bold">Geographic Distribution</h2>
+                        <p className="text-sm text-muted-foreground">Analysis of {measure} across Geresa Loreto provinces</p>
                     </div>
                     <div className="flex gap-2">
                         {provinceData.slice(0, 3).map(p => (
                             <div key={p.name} className="px-3 py-1 bg-teal-50 rounded-full border border-teal-100 flex items-center gap-2">
-                                <span className="text-[10px] font-bold text-teal-800">{p.name}</span>
+                                <span className="text-[10px] font-bold text-teal-800">{p.displayName}</span>
                                 <span className="text-[10px] font-bold text-[#003d33]">{p.value}%</span>
                             </div>
                         ))}

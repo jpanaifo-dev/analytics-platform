@@ -16,12 +16,12 @@ export default function AnalyticsLayout({ children }: LayoutProps) {
     return (
         <SidebarProvider
             style={{ "--sidebar-width": "336px", "--sidebar-width-icon": "56px" } as React.CSSProperties}
-            className="overflow-x-hidden"
+            className="overflow-hidden h-svh"
         >
             <AnalyticsFilterSidebar />
-            <SidebarInset className="bg-slate-50/50 shadow-inner">
+            <SidebarInset className="shadow-inner overflow-hidden flex flex-col h-full">
                 <SiteHeader sectionTitle={t("title")} />
-                <div className="flex-1 flex flex-col overflow-hidden h-[calc(100vh-64px)]">
+                <div className="flex-1 overflow-y-auto overflow-x-hidden relative">
                     {children}
                 </div>
             </SidebarInset>
